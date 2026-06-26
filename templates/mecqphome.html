@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            MecQP
+        </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/mecqphome.css') }}">
+    </head>
+    <body>
+        <h1>
+            MecQP
+        </h1>
+        <p>
+            A student-made online free repository for MECians.
+        </p>
+        <div id="search">
+            <a href="{{ url_for('search') }}" id="searchbutton">
+                Search
+            </a>
+            <p id="searchdef">
+                Search and find the PYQP you want
+            </p>
+        </div>
+        <br>
+        <div id="submit">
+            <a href="{{ url_for('submit') }}" id="searchbutton">
+                Submit
+            </a>
+            <p id="submitdef">
+                Upload and submit PYQP PDFs you possess
+            </p>
+        </div>
+        <br>
+        <div id="status">
+            <a href="{{ url_for('status') }}" id="searchbutton">
+                Status
+            </a>
+            <p id="statusdef">
+                Check the status of your submissions
+            </p>
+        </div>
+        <br>
+        <div id="about">
+            <a href="{{ url_for('about') }}" id="searchbutton">
+                About
+            </a>
+            <p id="aboutdef">
+                Site info
+            </p>
+        </div>
+    </body>
+</html>
