@@ -5,9 +5,11 @@ def home():
     if request.method=='POST':
         return
     return render_template("mecqphome.html")
-@app.route("/search")
+@app.route("/search", methods=['GET','POST'])
 def search():
-    return "<p>Work in progress</p>"
+    if request.method=='POST':
+        return "<p>Work in progress</p>"
+    return render_template("mecqpsearch.html")
 @app.route("/submit")
 def submit():
     return "<p>Work in progress</p>"
