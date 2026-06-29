@@ -43,9 +43,12 @@
                 </tr>
                 <tr>
                     <td>
-                        <select id="Scheme">
+                        <select id="Scheme" name="scheme">
                             <option>
                                 Select 
+                            </option>
+                            <option>
+                                All
                             </option>
                             <option>
                                 2019
@@ -56,9 +59,12 @@
                         </select>
                     </td>
                     <td>
-                        <select id="Branch">
+                        <select id="Branch" name="branch">
                             <option>
                                 Select
+                            </option>
+                            <option>
+                                All
                             </option>
                             <option>
                                 CSE
@@ -84,9 +90,12 @@
                         </select>
                     </td>
                     <td>
-                        <select id="Semester">
+                        <select id="Semester" name="semester">
                             <option>
                                 Select
+                            </option>
+                            <option>
+                                All
                             </option>
                             <option>
                                 1
@@ -115,9 +124,12 @@
                         </select>
                     </td>
                     <td>
-                        <select id="Exam_Type">
+                        <select id="Exam_Type" name="exam_type">
                             <option>
                                 Select
+                            </option>
+                            <option>
+                                All
                             </option>
                             <option>
                                 Internal-1
@@ -134,9 +146,12 @@
                         </select>
                     </td>
                     <td>
-                        <select id="Month">
+                        <select id="Month" name="month">
                             <option>
                                 Select
+                            </option>
+                            <option>
+                                All
                             </option>
                             <option>
                                 January
@@ -177,9 +192,12 @@
                         </select>
                     </td>
                     <td>
-                        <select id="Year">
+                        <select id="Year" name="year">
                             <option>
                                 Select
+                            </option>
+                            <option>
+                                All
                             </option>
                             <option>
                                 2026
@@ -208,10 +226,10 @@
                         </select>
                     </td>
                     <td>
-                        <input type="text" id="Subject_Code">
+                        <input type="text" id="Subject_Code" name="subject_code">
                     </td>
                     <td>
-                        <input type="text" id="Subject">
+                        <input type="text" id="Subject" name="subject">
                     </td>
                 </tr>
             </table>
@@ -219,6 +237,77 @@
                 Search
             </button>
         </form>
+        <br><br>
+        <table id="searchresults" name="searchresults">
+            <tr>
+                <th>
+                    SL.NO
+                </th>
+                <th>
+                    Scheme
+                </th>
+                <th>
+                    Branch
+                </th>
+                <th>
+                    Semester
+                </th>
+                <th>
+                    Exam Type
+                </th>
+                <th>
+                    Month
+                </th>
+                <th>
+                    Year
+                </th>
+                <th>
+                    Subject Code
+                </th>
+                <th>
+                    Subject
+                </th>
+                <th>
+                    Download Link
+                </th>
+            </tr>
+            {% for result in results %}
+                <tr>
+                    <td>
+                        {{ result[0] }}
+                    </td>
+                    <td>
+                        {{ result[1] }}
+                    </td>
+                    <td>
+                        {{ result[2] }}
+                    </td>
+                    <td>
+                        {{ result[3] }}
+                    </td>
+                    <td>
+                        {{ result[4] }}
+                    </td>
+                    <td>
+                        {{ result[5] }}
+                    </td>
+                    <td>
+                        {{ result[6] }}
+                    </td>
+                    <td>
+                        {{ result[7] }}
+                    </td>
+                    <td>
+                        {{ result[8] }}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('download', name=result[9]) }}">
+                            Download
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
         <script src="{{ url_for('static', filename='js/mecqpsearch.js') }}">
         </script>
     </body>
