@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            MecQP
+        </title>
+    </head>
+    <body>
+        <h3>
+            Go back to homepage
+        </h3>
+        <a href="{{ url_for('home') }}" id="homeurl">
+            Home
+        </a>
+        <table id="statusesults" name="statusesults">
+            <tr>
+                <th>
+                    Submission ID
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Reason
+                </th>
+            </tr>
+            {% for result in results %}
+                <tr>
+                    <td>
+                        {{ result[0] }}
+                    </td>
+                    <td>
+                        {% if result[1] == 2 %}
+                            <p>
+                                Approved
+                            </p>
+                        {% elif result[1] == 0 %}
+                            <p>
+                                Rejected
+                            </p>
+                        {% else %}
+                            <p>
+                                Pending
+                            </p>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if result[1] == 0 %}
+                            <p>
+                                {{ result[2] }}
+                            </p>
+                        {% else %}
+                            <p>
+                            </p>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

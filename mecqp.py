@@ -143,7 +143,12 @@ def uploadclosed():
     return render_template("mecqpuploadclosed.html")
 @app.route("/status")
 def status():
-    return "<p>Work in progress</p>"
+    with sqlite3.connect("test.db") as conn:
+        cur=conn.cursor()
+        query="SELECT submission_id, status, reason FROM submissions ORDER BY submission_id DESC LIMIT 20"
+        cur.execute(query)
+        results=cur.fetchall()
+        return render_template("mecqpstatus.html", results=results)
 @app.route("/about")
 def about():
     return "<p>Work in progress</p>"
