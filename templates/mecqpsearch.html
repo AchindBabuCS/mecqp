@@ -308,6 +308,12 @@
                 </tr>
             {% endfor %}
         </table>
+        <h3>
+            Go back to homepage
+        </h3>
+        <a href="{{ url_for('home') }}" id="homeurl">
+            Home
+        </a>
         <script src="{{ url_for('static', filename='js/mecqpsearch.js') }}">
         </script>
     </body>

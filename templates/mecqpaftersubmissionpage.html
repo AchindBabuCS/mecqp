@@ -7,8 +7,32 @@
     </head>
     <body>
         <h2>
-            Your submission has been accepted and your submission id is {{ submission_id }}.
+            Your submission has been accepted and your submission id is:
+            <h1>
+                {{ submission_id }}.
+            </h1>
             Please remember your submission ID as you can check the status of your submission using it
         </h2>
+        <br>
+        <h3>
+            Go back to homepage
+        </h3>
+        <a href="{{ url_for('home') }}" id="homeurl">
+            Home
+        </a>
+        <br>
+        <h3>
+            Check the status of your submission
+        </h3>
+        <a href="{{ url_for('status') }}" id="statusurl">
+            Status
+        </a>
+        <br>
+        <h3>
+            Submit another PYQP
+        </h3>
+        <a href="{{ url_for('submit') }}" id="submiturl">
+            Submit
+        </a>
     </body>
 </html>
