@@ -1,6 +1,12 @@
 from flask import Flask, render_template, redirect, request, session, url_for, send_from_directory
+from werkzeug.utils import secure_filename
+from datetime import datetime
 import sqlite3
+ALLOWED_EXTENSIONS={'pdf'}
 app=Flask(__name__)
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 @app.route("/")
 def home():    
     return render_template("mecqphome.html")
@@ -98,9 +104,43 @@ def search():
 @app.route("/papers/<name>")
 def download(name):
     return send_from_directory('papers',name)
-@app.route("/submit")
+@app.route("/submit", methods=['GET','POST'])
 def submit():
-    return "<p>Work in progress</p>"
+    if request.method=='POST':
+        if 'file' not in request.files:
+            return redirect(url_for("submit"))
+        file=request.files["file"]
+        if file.filename=="":
+            return redirect(url_for("submit"))
+        if file and allowed_file(file.filename):
+            with sqlite3.connect("test.db") as conn:
+                cur=conn.cursor()
+                submission_date=datetime.today().strftime('%d.%m.%y')
+                sublimitstatement='SELECT * FROM submissions WHERE submission_date=?'
+                cur.execute(sublimitstatement, (submission_date,))
+                no_of_submissions=cur.fetchall()
+                if len(no_of_submissions)>9:
+                    return redirect(url_for("uploadclosed"))
+                else:
+                    filename=secure_filename(file.filename)
+                    submitstatement='''INSERT INTO submissions(filename,description,status,reason,submission_date)
+                                        VALUES (?,?,?,?,?)'''
+                    values=[filename,request.form["description"],1,"Pending",submission_date]
+                    cur.execute(submitstatement, values)
+                    cur.execute("SELECT submission_id FROM submissions WHERE filename=?", (filename,))
+                    submission_id=cur.fetchone()[0]
+                    conn.commit()
+                    file.save(f"submissions/{filename}")
+                    return redirect(url_for("aftersubmission", submission_id=submission_id))
+        else:
+            return redirect(url_for("submit"))    
+    return render_template("mecqpsubmit.html")
+@app.route("/aftersubmission/<int:submission_id>")
+def aftersubmission(submission_id):
+    return render_template("mecqpaftersubmissionpage.html", submission_id=submission_id)
+@app.route("/uploadclosed")
+def uploadclosed():
+    return render_template("mecqpuploadclosed.html")
 @app.route("/status")
 def status():
     return "<p>Work in progress</p>"

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            MecQP
+        </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/mecqpsubmit.css') }}">
+    </head>
+    <body>
+        <h1>
+            Submit
+        </h1>
+        <p>
+            Upload and submit PYQPs of your own. </p><p>The upload PYQP will then checked and verified by the admin and may be accepted and added into the collection of papers or will be rejected.</p><p> If rejected, reason for rejection will be provided.</p><p> After submission, you will be provided a submission ID which you must remember to check the status of your submission.</p>
+            <form method="POST" id="submit" name="submit" enctype="multipart/form-data">
+                <h3>
+                    File:
+                </h3>
+                <input type="file" id="file" name="file">
+                <br>
+                <h3>
+                    Description
+                </h3>
+                <input type="text" id="description" name="description">
+                <br><br>
+                <button type="submit" name="upload">
+                    Submit
+                </button>
+            </form>
+            <h3>
+                Upload Rules:
+            </h3>
+            <ol>
+                <li>
+                    File must be in PDF format
+                </li>
+                <li>
+                    Must not contain any personal information
+                </li>
+                <li>
+                    File must be under 10MB size
+                </li>
+                <li>
+                    Description must contain the following details:
+                    <ul>
+                        <li>
+                            Scheme (eg: 2024, etc)
+                        </li>
+                        <li>
+                            Branch (eg: CSE, EC, etc)
+                        </li>
+                        <li>
+                            Semester (eg: 1,2,etc)
+                        </li>
+                        <li>
+                            Exam Type (eg: Internal-1, Semester-R, etc)
+                        </li>
+                        <li>
+                            Month (eg: January, February, etc)
+                        </li>
+                        <li>
+                            Year (eg: 2026, 2025, etc)
+                        </li>
+                        <li>
+                            Subject Code (eg: GAMAT101, GAMAT201, etc)
+                        </li>
+                        <li>
+                            Subject (eg: Mathematics For Information Science-1, Discrete Mathematics, etc )
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    Description must contain any corrections to QP or notes for the end user, if any exist.
+                </li>
+                <li>
+                    PDF must contain clear and full scans of QP
+                </li>
+                <li>
+                    Only PYQP PDFs must be uploaded.
+                </li>
+            </ol>
+            <h3>
+                Potential reasons for rejection:
+            </h3>
+            <ul>
+                <li>
+                    File contains personal information
+                </li>
+                <li>
+                    Description does not contain adequate details
+                </li>
+                <li>
+                    File contains blurred scans
+                </li>
+                <li>
+                    File is incomplete QP
+                </li>
+                <li>
+                    File does not contain QP
+                </li>
+            </ul>
+        </p>
+        <script src="{{ url_for('static', filename='js/mecqpsubmit.js') }}">      
+        </script>
+    </body>
+</html>
