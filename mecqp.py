@@ -1,9 +1,14 @@
 from flask import Flask, render_template, redirect, request, session, url_for, send_from_directory
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import sqlite3
+import os
 ALLOWED_EXTENSIONS={'pdf'}
 app=Flask(__name__)
+app.secret_key="0aa8b7b5b164a6f63a0fc9f17b2ce44ff8021164c245222c63074ef6c90cb7e8"
+passwordhash="scrypt:32768:8:1$WQvHUqGixZxourSo$febe6250106cb6d7eb97fae37896c55ecb4228955a42d681b5134b23340aabe424a848252110cd325c6643a9a5f46e1c4404371364ba7bf6a17aae1122ee539c"
+database="test.db"
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -13,7 +18,7 @@ def home():
 @app.route("/search", methods=['GET','POST'])
 def search():
     if request.method=='POST':
-        with sqlite3.connect("test.db") as conn:
+        with sqlite3.connect(database) as conn:
             query="SELECT * FROM papers"
             parameterlist=[request.form["scheme"],request.form["branch"],request.form["semester"],request.form["exam_type"],request.form["month"],request.form["year"],request.form["subject_code"],request.form["subject"]]
             p6=f"%{parameterlist[6]}%"
@@ -113,7 +118,7 @@ def submit():
         if file.filename=="":
             return redirect(url_for("submit"))
         if file and allowed_file(file.filename):
-            with sqlite3.connect("test.db") as conn:
+            with sqlite3.connect(database) as conn:
                 cur=conn.cursor()
                 submission_date=datetime.today().strftime('%d.%m.%y')
                 sublimitstatement='SELECT * FROM submissions WHERE submission_date=?'
@@ -127,10 +132,11 @@ def submit():
                                         VALUES (?,?,?,?,?)'''
                     values=[filename,request.form["description"],1,"Pending",submission_date]
                     cur.execute(submitstatement, values)
-                    cur.execute("SELECT submission_id FROM submissions WHERE filename=?", (filename,))
-                    submission_id=cur.fetchone()[0]
+                    submission_id=cur.lastrowid
+                    savefilename=str(submission_id)+"_"+filename
+                    cur.execute("UPDATE submissions SET filename=? WHERE submission_id=?",(savefilename,submission_id))
                     conn.commit()
-                    file.save(f"submissions/{filename}")
+                    file.save(f"submissions/{savefilename}")
                     return redirect(url_for("aftersubmission", submission_id=submission_id))
         else:
             return redirect(url_for("submit"))    
@@ -143,7 +149,7 @@ def uploadclosed():
     return render_template("mecqpuploadclosed.html")
 @app.route("/status")
 def status():
-    with sqlite3.connect("test.db") as conn:
+    with sqlite3.connect(database) as conn:
         cur=conn.cursor()
         query="SELECT submission_id, status, reason FROM submissions ORDER BY submission_id DESC LIMIT 20"
         cur.execute(query)
@@ -151,7 +157,328 @@ def status():
         return render_template("mecqpstatus.html", results=results)
 @app.route("/about")
 def about():
-    return "<p>Work in progress</p>"
-@app.route("/admin")
+    with sqlite3.connect(database) as conn:
+        announcementquery="SELECT message, message_date FROM adminmessages ORDER BY message_id DESC"
+        cur=conn.cursor()
+        cur.execute(announcementquery)
+        latestmessage=cur.fetchone()
+        return render_template("mecqpabout.html", latestmessage=latestmessage)
+@app.route("/adminlogin", methods=['GET','POST'])
+def adminlogin():
+    wrongpassword=False
+    if request.method=='POST':
+        if check_password_hash(passwordhash,request.form['adminloginpassword']):
+            session['admin']=True
+            return redirect(url_for("admin"))
+        else:
+            wrongpassword=True
+            return render_template("mecqpadminlogin.html", wrongpassword=wrongpassword)
+    return render_template("mecqpadminlogin.html")
+@app.route("/admin", methods=['GET','POST'])
 def admin():
-    return "<p>Work in progress</p>"
+    if session.get("admin"):
+        modifymode=False
+        deletemode=False
+        if request.method=='POST':
+            if 'upload' in request.form:
+                if 'newfile' not in request.files:
+                    return redirect(url_for("admin"))
+                file=request.files["newfile"]
+                fname=file.filename
+                if file.filename=="":
+                    return redirect(url_for("admin"))
+                if file and allowed_file(fname):
+                    with sqlite3.connect(database) as conn:
+                        newpaperquery='''INSERT INTO papers (scheme,branch,semester,exam_type,month,year,subject_code,subject,filename) VALUES(?,?,?,?,?,?,?,?,?)'''
+                        newpaperparameter=[request.form["newscheme"],request.form["newbranch"],request.form["newsemester"],request.form["newexam_type"],request.form["newmonth"],request.form["newyear"],request.form["newsubject_code"],request.form["newsubject"],fname]
+                        file.save(f"papers/{fname}")
+                        cur=conn.cursor()
+                        cur.execute(newpaperquery, newpaperparameter)
+                        conn.commit()
+                        return redirect(url_for("admin"))
+            if 'modifybutton' in request.form:
+                modifymode=True
+                return render_template("mecqpadmin.html", modifymode=modifymode)
+            if 'modifysearch' in request.form:
+                modifymode=True
+                with sqlite3.connect(database) as conn:
+                    modifysearchquery="SELECT * FROM papers"
+                    modifysearchparameterlist=[request.form["modifysearchscheme"],request.form["modifysearchbranch"],request.form["modifysearchsemester"],request.form["modifysearchexam_type"],request.form["modifysearchmonth"],request.form["modifysearchyear"]]
+                    modifysearchpm=[]
+                    ifall=1
+                    ifpriorqueryadded=False
+                    for i in modifysearchparameterlist:
+                        if i!='All':
+                            ifall=0
+                            break
+                        else:
+                            ifall=1
+                    if ifall!=1:
+                        modifysearchquery=modifysearchquery+" "+"WHERE"
+                    if modifysearchparameterlist[0]!='All':
+                        ifpriorqueryadded=True
+                        modifysearchquery=modifysearchquery+" "+"scheme=?"
+                        modifysearchpm.append(modifysearchparameterlist[0])
+                    if modifysearchparameterlist[1]!='All':
+                        if ifpriorqueryadded:
+                            ifpriorqueryadded=True
+                            modifysearchquery=modifysearchquery+" "+"AND"+" "+"branch=?"
+                            modifysearchpm.append(modifysearchparameterlist[1])
+                        else:
+                            ifpriorqueryadded=True
+                            modifysearchquery=modifysearchquery+" "+"branch=?"
+                            modifysearchpm.append(modifysearchparameterlist[1])
+                    if modifysearchparameterlist[2]!='All':
+                        if ifpriorqueryadded:
+                            ifpriorqueryadded=True
+                            modifysearchquery=modifysearchquery+" "+"AND"+" "+"semester=?"
+                            modifysearchpm.append(modifysearchparameterlist[2])
+                        else:
+                            ifpriorqueryadded=True
+                            modifysearchquery=modifysearchquery+" "+"semester=?"
+                            modifysearchpm.append(modifysearchparameterlist[2])
+                    if modifysearchparameterlist[3]!='All':
+                        if ifpriorqueryadded:
+                            ifpriorqueryadded=True
+                            modifysearchquery=modifysearchquery+" "+"AND"+" "+"exam_type=?"
+                            modifysearchpm.append(modifysearchparameterlist[3])
+                        else:
+                            ifpriorqueryadded=True
+                            modifysearchquery=modifysearchquery+" "+"exam_type=?"
+                            modifysearchpm.append(modifysearchparameterlist[3])
+                    if modifysearchparameterlist[4]!='All':
+                        if ifpriorqueryadded:
+                            ifpriorqueryadded=True
+                            modifysearchquery=modifysearchquery+" "+"AND"+" "+"month=?"
+                            modifysearchpm.append(modifysearchparameterlist[4])
+                        else:
+                            ifpriorqueryadded=True
+                            modifysearchquery=modifysearchquery+" "+"month=?"
+                            modifysearchpm.append(modifysearchparameterlist[4])
+                    if modifysearchparameterlist[5]!='All':
+                        if ifpriorqueryadded:
+                            ifpriorqueryadded=True
+                            modifysearchquery=modifysearchquery+" "+"AND"+" "+"year=?"
+                            modifysearchpm.append(modifysearchparameterlist[5])
+                        else:
+                            ifpriorqueryadded=True
+                            modifysearchquery=modifysearchquery+" "+"year=?"
+                            modifysearchpm.append(modifysearchparameterlist[5])
+                    cur=conn.cursor()
+                    cur.execute(modifysearchquery,modifysearchpm)
+                    modifysearchresults=cur.fetchall()
+                    return render_template("mecqpadmin.html", modifymode=modifymode, modifysearchresults=modifysearchresults)
+            if 'updatesubmit' in request.form:
+                modifymode=False
+                with sqlite3.connect(database) as conn:
+                    modifysubmitquery="UPDATE papers"
+                    modifysubmitparameterlist=[request.form['updatescheme'],request.form['updatebranch'],request.form['updatesemester'],request.form['updateexam_type'],request.form['updatemonth'],request.form['updateyear'],request.form['updatepaperid']]
+                    modifysubmitpm=[]
+                    ifall=1
+                    ifpriorqueryadded=False
+                    for i in range(len(modifysubmitparameterlist)-1):
+                        if modifysubmitparameterlist[i]!='All':
+                            ifall=0
+                            break
+                        else:
+                            ifall=1
+                    if ifall==1:
+                        return render_template("mecqpadmin.html", modifymode=modifymode)
+                    else:
+                        modifysubmitquery=modifysubmitquery+" "+"SET"
+                        if modifysubmitparameterlist[0]!='All':
+                            ifpriorqueryadded=True
+                            modifysubmitquery=modifysubmitquery+" "+"scheme=?"
+                            modifysubmitpm.append(modifysubmitparameterlist[0])
+                        if modifysubmitparameterlist[1]!='All':
+                            if ifpriorqueryadded:
+                                ifpriorqueryadded=True
+                                modifysubmitquery=modifysubmitquery+","+" "+"branch=?"
+                                modifysubmitpm.append(modifysubmitparameterlist[1])
+                            else:
+                                ifpriorqueryadded=True
+                                modifysubmitquery=modifysubmitquery+" "+"branch=?"
+                                modifysubmitpm.append(modifysubmitparameterlist[1])
+                        if modifysubmitparameterlist[2]!='All':
+                            if ifpriorqueryadded:
+                                ifpriorqueryadded=True
+                                modifysubmitquery=modifysubmitquery+","+" "+"semester=?"
+                                modifysubmitpm.append(modifysubmitparameterlist[2])
+                            else:
+                                ifpriorqueryadded=True
+                                modifysubmitquery=modifysubmitquery+" "+"semester=?"
+                                modifysubmitpm.append(modifysubmitparameterlist[2])
+                        if modifysubmitparameterlist[3]!='All':
+                            if ifpriorqueryadded:
+                                ifpriorqueryadded=True
+                                modifysubmitquery=modifysubmitquery+","+" "+"exam_type=?"
+                                modifysubmitpm.append(modifysubmitparameterlist[3])
+                            else:
+                                ifpriorqueryadded=True
+                                modifysubmitquery=modifysubmitquery+" "+"exam_type=?"
+                                modifysubmitpm.append(modifysubmitparameterlist[3])
+                        if modifysubmitparameterlist[4]!='All':
+                            if ifpriorqueryadded:
+                                ifpriorqueryadded=True
+                                modifysubmitquery=modifysubmitquery+","+" "+"month=?"
+                                modifysubmitpm.append(modifysubmitparameterlist[4])
+                            else:
+                                ifpriorqueryadded=True
+                                modifysubmitquery=modifysubmitquery+" "+"month=?"
+                                modifysubmitpm.append(modifysubmitparameterlist[4])
+                        if modifysubmitparameterlist[5]!='All':
+                            if ifpriorqueryadded:
+                                ifpriorqueryadded=True
+                                modifysubmitquery=modifysubmitquery+","+" "+"year=?"
+                                modifysubmitpm.append(modifysubmitparameterlist[5])
+                            else:
+                                ifpriorqueryadded=True
+                                modifysubmitquery=modifysubmitquery+" "+"year=?"
+                                modifysubmitpm.append(modifysubmitparameterlist[5])
+                        modifysubmitquery=modifysubmitquery+" "+"WHERE paper_id=?"
+                        modifysubmitpm.append(modifysubmitparameterlist[6])
+                        cur=conn.cursor()
+                        cur.execute(modifysubmitquery,modifysubmitpm)
+                        conn.commit()
+                        return render_template("mecqpadmin.html", modifymode=modifymode)
+            if 'deletebutton' in request.form:
+                deletemode=True
+                return render_template("mecqpadmin.html", deletemode=deletemode)
+            if 'deletesearch' in request.form:
+                deletemode=True
+                with sqlite3.connect(database) as conn:
+                    deletesearchquery="SELECT * FROM papers"
+                    deletesearchparameterlist=[request.form['deletesearchscheme'],request.form['deletesearchbranch'],request.form['deletesearchsemester'],request.form['deletesearchexam_type'],request.form['deletesearchmonth'],request.form['deletesearchyear']]
+                    deletesearchpm=[]
+                    ifall=1
+                    ifpriorqueryadded=False
+                    for i in deletesearchparameterlist:
+                        if i!='All':
+                            ifall=0
+                            break
+                        else:
+                            ifall=1
+                    if ifall!=1:
+                        deletesearchquery=deletesearchquery+" "+"WHERE"
+                    if deletesearchparameterlist[0]!='All':
+                        ifpriorqueryadded=True
+                        deletesearchquery=deletesearchquery+" "+"scheme=?"
+                        deletesearchpm.append(deletesearchparameterlist[0])
+                    if deletesearchparameterlist[1]!='All':
+                        if ifpriorqueryadded:
+                            ifpriorqueryadded=True
+                            deletesearchquery=deletesearchquery+" "+"AND"+" "+"branch=?"
+                            deletesearchpm.append(deletesearchparameterlist[1])
+                        else:
+                            ifpriorqueryadded=True
+                            deletesearchquery=deletesearchquery+" "+"branch=?"
+                            deletesearchpm.append(deletesearchparameterlist[1])
+                    if deletesearchparameterlist[2]!='All':
+                        if ifpriorqueryadded:
+                            ifpriorqueryadded=True
+                            deletesearchquery=deletesearchquery+" "+"AND"+" "+"semester=?"
+                            deletesearchpm.append(deletesearchparameterlist[2])
+                        else:
+                            ifpriorqueryadded=True
+                            deletesearchquery=deletesearchquery+" "+"semester=?"
+                            deletesearchpm.append(deletesearchparameterlist[2])
+                    if deletesearchparameterlist[3]!='All':
+                        if ifpriorqueryadded:
+                            ifpriorqueryadded=True
+                            deletesearchquery=deletesearchquery+" "+"AND"+" "+"exam_type=?"
+                            deletesearchpm.append(deletesearchparameterlist[3])
+                        else:
+                            ifpriorqueryadded=True
+                            deletesearchquery=deletesearchquery+" "+"exam_type=?"
+                            deletesearchpm.append(deletesearchparameterlist[3])
+                    if deletesearchparameterlist[4]!='All':
+                        if ifpriorqueryadded:
+                            ifpriorqueryadded=True
+                            deletesearchquery=deletesearchquery+" "+"AND"+" "+"month=?"
+                            deletesearchpm.append(deletesearchparameterlist[4])
+                        else:
+                            ifpriorqueryadded=True
+                            deletesearchquery=deletesearchquery+" "+"month=?"
+                            deletesearchpm.append(deletesearchparameterlist[4])
+                    if deletesearchparameterlist[5]!='All':
+                        if ifpriorqueryadded:
+                            ifpriorqueryadded=True
+                            deletesearchquery=deletesearchquery+" "+"AND"+" "+"year=?"
+                            deletesearchpm.append(deletesearchparameterlist[5])
+                        else:
+                            ifpriorqueryadded=True
+                            deletesearchquery=deletesearchquery+" "+"year=?"
+                            deletesearchpm.append(deletesearchparameterlist[5])
+                    cur=conn.cursor()
+                    cur.execute(deletesearchquery,deletesearchpm)
+                    deletesearchresults=cur.fetchall()
+                    return render_template("mecqpadmin.html", deletemode=deletemode, deletesearchresults=deletesearchresults)
+            if 'deletesubmit' in request.form:
+                deletemode=False
+                with sqlite3.connect(database) as conn:
+                    deletefilenamequery="SELECT filename FROM papers WHERE paper_id=?"
+                    deletefilenamepaperid=request.form["deletepaperid"]
+                    cur=conn.cursor()
+                    cur.execute(deletefilenamequery,(deletefilenamepaperid,))
+                    deletefilenamerow=cur.fetchone()
+                    deletefilequery="DELETE FROM papers WHERE paper_id=?"
+                    os.remove(f"papers/{deletefilenamerow[0]}")
+                    cur.execute(deletefilequery,(deletefilenamepaperid,))
+                    conn.commit()
+                    return render_template("mecqpadmin.html", deletemode=deletemode)
+            if 'acceptsubmission' in request.form:
+                with sqlite3.connect(database) as conn:
+                    acceptpaperid=request.form["acceptpaperid"]
+                    acceptfilenamequery="SELECT filename FROM submissions WHERE submission_id=?"
+                    acceptquery="UPDATE submissions SET status=2 WHERE submission_id=?"
+                    cur=conn.cursor()
+                    cur.execute(acceptfilenamequery,(acceptpaperid,))
+                    acceptfilenamerow=cur.fetchone()
+                    os.remove(f"submissions/{acceptfilenamerow[0]}")
+                    cur.execute(acceptquery,(acceptpaperid,))
+                    conn.commit()
+                    return redirect(url_for("admin"))
+            if 'rejectsubmission' in request.form:
+                with sqlite3.connect(database) as conn:
+                    rejectpaperid=request.form["rejectpaperid"]
+                    rejectfilenamequery="SELECT filename FROM submissions WHERE submission_id=?"
+                    rejectquery="UPDATE submissions SET status=0, reason=? WHERE submission_id=?"
+                    rejectpm=[request.form["Reason"],rejectpaperid]
+                    cur=conn.cursor()
+                    cur.execute(rejectfilenamequery,(rejectpaperid,))
+                    rejectfilenamerow=cur.fetchone()
+                    os.remove(f"submissions/{rejectfilenamerow[0]}")
+                    cur.execute(rejectquery,rejectpm)
+                    conn.commit()
+                    return redirect(url_for("admin"))
+            if 'adminmessagesubmit' in request.form:
+                with sqlite3.connect(database) as conn:
+                    messageupdatedate=datetime.today().strftime('%d.%m.%y')
+                    messageupdatequery="INSERT INTO adminmessages (message,message_date) VALUES(?,?)"
+                    messageupdatepm=[request.form["adminmessage"],messageupdatedate]
+                    cur=conn.cursor()
+                    cur.execute(messageupdatequery,messageupdatepm)
+                    conn.commit()
+            if 'adminlogout' in request.form:
+                return redirect(url_for("adminlogout"))
+        with sqlite3.connect(database) as conn:
+            subimssionsquery="SELECT * FROM submissions WHERE status=1"
+            cur=conn.cursor()
+            cur.execute(subimssionsquery)
+            submissions=cur.fetchall()
+            return render_template("mecqpadmin.html", submissions=submissions)
+    else:
+        return redirect(url_for("adminlogin"))
+@app.route("/adminlogout")
+def adminlogout():
+    if session.get("admin"):
+        session.pop("admin",None)
+        return render_template("mecqpadminlogout.html")
+    else:
+        return redirect(url_for("adminlogin"))
+@app.route("/submissions/<submissionname>")
+def submissiondownload(submissionname):
+    if session.get("admin"):
+        return send_from_directory('submissions',submissionname)
+    else:
+        return redirect(url_for("adminlogin"))

@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            MecQP
+        </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/mecqpadmin.css') }}">
+    </head>
+    <body>
+        <h1>
+            Admin Page
+        </h1>
+        <form method="POST">
+            <button type="submit" name="adminlogout">
+                Logout
+            </button>
+        </form>
+        <h3>
+            Submissions
+        </h3>
+        <table>
+            <tr>
+                <th>
+                    Submission ID
+                </th>
+                <th>
+                    Filename
+                </th>
+                <th>
+                    Download
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Date of upload
+                </th>
+            </tr>
+            {% for submission in submissions %}
+                <tr>
+                    <td>
+                        {{ submission[0] }}
+                    </td>
+                    <td>
+                        {{ submission[1] }}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('submissiondownload', submissionname=submission[1]) }}">
+                            Download
+                        </a>
+                    </td>
+                    <td>
+                        <form method="POST">
+                            <input type="hidden" value="{{ submission[0] }}" name="acceptpaperid">
+                            <button type="submit" name="acceptsubmission" id="acceptsubmission">
+                                &#10004;    
+                            </button>
+                        </form>
+                        <form method="POST" onsubmit="return rejectValidate(event)">
+                            <input type="hidden" value="{{ submission[0] }}" name="rejectpaperid">
+                            <button type="submit" id="rejectsubmission" name="rejectsubmission">
+                                &#10006;       
+                            </button>
+                            <input type="text" class="Reason" name="Reason">
+                        </form>
+                    </td>
+                    <td>
+                        <pre>
+                            {{ submission[2] }}
+                        </pre>
+                    </td>
+                    <td>
+                        {{ submission[5] }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <form method="POST" onsubmit="return messageValidate()">
+            <textarea id="adminmessage" name="adminmessage" rows="5" cols="20"></textarea>
+            <button type="submit" name="adminmessagesubmit">
+                Post
+            </button>
+        </form>
+        <button id="New">
+            New
+        </button>
+        <form method="POST">
+            <button type="submit" name="modifybutton" id="Modify">
+                Modify
+            </button>
+        </form>
+        {% if modifymode %}
+            <form method="POST" id="modifysearch" name="modifysearch" onsubmit="return modifyValidate()">
+                <table id="modifysearchinputbox">
+                    <tr>
+                        <th>
+                            Scheme
+                        </th>
+                        <th>
+                            Branch
+                        </th>
+                        <th>
+                            Semester
+                        </th>
+                        <th>
+                            Exam Type
+                        </th>
+                        <th>
+                            Month
+                        </th>
+                        <th>
+                            Year
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="modifysearchscheme" name="modifysearchscheme">
+                                <option>
+                                    Select 
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    2019
+                                </option>
+                                <option>
+                                    2024
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <select id="modifysearchbranch" name="modifysearchbranch">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    CSE
+                                </option>
+                                <option>
+                                    CSBS
+                                </option>
+                                <option>
+                                    EC
+                                </option>
+                                <option>
+                                    EB
+                                </option>
+                                <option>
+                                    EV
+                                </option>
+                                <option>
+                                    EEE
+                                </option>
+                                <option>
+                                    ME
+                                </option>     
+                            </select>
+                        </td>
+                        <td>
+                            <select id="modifysearchsemester" name="modifysearchsemester">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    1
+                                </option>
+                                <option>
+                                    2
+                                </option>
+                                <option>
+                                    3
+                                </option>
+                                <option>
+                                    4
+                                </option>
+                                <option>
+                                    5
+                                </option>
+                                <option>
+                                    6
+                                </option>
+                                <option>
+                                    7
+                                </option>
+                                <option>
+                                    8
+                                </option>  
+                            </select>
+                        </td>
+                        <td>
+                            <select id="modifysearchexam_type" name="modifysearchexam_type">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    Internal-1
+                                </option>
+                                <option>
+                                    Internal-2
+                                </option>
+                                <option>
+                                    Semester-R
+                                </option>
+                                <option>
+                                    Semester-S
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <select id="modifysearchmonth" name="modifysearchmonth">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    January
+                                </option>
+                                <option>
+                                    February
+                                </option>
+                                <option>
+                                    March
+                                </option>
+                                <option>
+                                    April
+                                </option>
+                                <option>
+                                    May
+                                </option>
+                                <option>
+                                    June
+                                </option>
+                                <option>
+                                    July
+                                </option>
+                                <option>
+                                    August
+                                </option>
+                                <option>
+                                    September
+                                </option>
+                                <option>
+                                    October
+                                </option>
+                                <option>
+                                    November
+                                </option>
+                                <option>
+                                    December
+                                </option>       
+                            </select>
+                        </td>
+                        <td>
+                            <select id="modifysearchyear" name="modifysearchyear">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    2026
+                                </option>
+                                <option>
+                                    2025
+                                </option>
+                                <option>
+                                    2024
+                                </option>
+                                <option>
+                                    2023
+                                </option>
+                                <option>
+                                    2022
+                                </option>
+                                <option>
+                                    2021
+                                </option>
+                                <option>
+                                    2020
+                                </option>
+                                <option>
+                                    2019
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" name="modifysearch" id="modifysearchsubmit">
+                                Submit
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <table>
+                <tr>
+                    <th>
+                        Paper ID
+                    </th>
+                    <th>
+                        Scheme
+                    </th>
+                    <th>
+                        Branch
+                    </th>
+                    <th>
+                        Semester
+                    </th>
+                    <th>
+                        Exam Type
+                    </th>
+                    <th>
+                        Month
+                    </th>
+                    <th>
+                        Year
+                    </th>
+                    <th>
+                        Subject Code
+                    </th>
+                    <th>
+                        Subject
+                    </th>
+                    <th>
+                        Update
+                    </th>
+                </tr>
+                {% for modifysearchresult in modifysearchresults %}
+                    <tr>
+                        <td>
+                            {{ modifysearchresult[0] }}
+                        </td>
+                        <td>
+                            {{ modifysearchresult[1] }}
+                        </td>
+                        <td>
+                            {{ modifysearchresult[2] }}
+                        </td>
+                        <td>
+                            {{ modifysearchresult[3] }}
+                        </td>
+                        <td>
+                            {{ modifysearchresult[4] }}
+                        </td>
+                        <td>
+                            {{ modifysearchresult[5] }}
+                        </td>
+                        <td>
+                            {{ modifysearchresult[6] }}
+                        </td>
+                        <td>
+                            {{ modifysearchresult[7] }}
+                        </td>
+                        <td>
+                            {{ modifysearchresult[8] }}
+                        </td>
+                        <td>
+                            <button class="Update" data-updatepaperid="{{ modifysearchresult[0] }}" data-updatesubject_code="{{ modifysearchresult[7] }}" data-updatesubject="{{ modifysearchresult[8] }}">
+                                Update
+                            </button>
+                        </td>
+                    </tr>
+            {% endfor %}
+            </table>
+            <input type="hidden" value="true" id="postformopen">
+        {% endif %}
+        <form method="POST">
+            <button type="submit" name="deletebutton" id="Delete">
+                Delete
+            </button>
+        </form>
+        {% if deletemode %}
+            <form method="POST" id="deletesearch" name="deletesearch" onsubmit="return deleteValidate()">
+                <table id="deletesearchinputbox">
+                    <tr>
+                        <th>
+                            Scheme
+                        </th>
+                        <th>
+                            Branch
+                        </th>
+                        <th>
+                            Semester
+                        </th>
+                        <th>
+                            Exam Type
+                        </th>
+                        <th>
+                            Month
+                        </th>
+                        <th>
+                            Year
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="deletesearchscheme" name="deletesearchscheme">
+                                <option>
+                                    Select 
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    2019
+                                </option>
+                                <option>
+                                    2024
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <select id="deletesearchbranch" name="deletesearchbranch">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    CSE
+                                </option>
+                                <option>
+                                    CSBS
+                                </option>
+                                <option>
+                                    EC
+                                </option>
+                                <option>
+                                    EB
+                                </option>
+                                <option>
+                                    EV
+                                </option>
+                                <option>
+                                    EEE
+                                </option>
+                                <option>
+                                    ME
+                                </option>     
+                            </select>
+                        </td>
+                        <td>
+                            <select id="deletesearchsemester" name="deletesearchsemester">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    1
+                                </option>
+                                <option>
+                                    2
+                                </option>
+                                <option>
+                                    3
+                                </option>
+                                <option>
+                                    4
+                                </option>
+                                <option>
+                                    5
+                                </option>
+                                <option>
+                                    6
+                                </option>
+                                <option>
+                                    7
+                                </option>
+                                <option>
+                                    8
+                                </option>  
+                            </select>
+                        </td>
+                        <td>
+                            <select id="deletesearchexam_type" name="deletesearchexam_type">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    Internal-1
+                                </option>
+                                <option>
+                                    Internal-2
+                                </option>
+                                <option>
+                                    Semester-R
+                                </option>
+                                <option>
+                                    Semester-S
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <select id="deletesearchmonth" name="deletesearchmonth">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    January
+                                </option>
+                                <option>
+                                    February
+                                </option>
+                                <option>
+                                    March
+                                </option>
+                                <option>
+                                    April
+                                </option>
+                                <option>
+                                    May
+                                </option>
+                                <option>
+                                    June
+                                </option>
+                                <option>
+                                    July
+                                </option>
+                                <option>
+                                    August
+                                </option>
+                                <option>
+                                    September
+                                </option>
+                                <option>
+                                    October
+                                </option>
+                                <option>
+                                    November
+                                </option>
+                                <option>
+                                    December
+                                </option>       
+                            </select>
+                        </td>
+                        <td>
+                            <select id="deletesearchyear" name="deletesearchyear">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    2026
+                                </option>
+                                <option>
+                                    2025
+                                </option>
+                                <option>
+                                    2024
+                                </option>
+                                <option>
+                                    2023
+                                </option>
+                                <option>
+                                    2022
+                                </option>
+                                <option>
+                                    2021
+                                </option>
+                                <option>
+                                    2020
+                                </option>
+                                <option>
+                                    2019
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" name="deletesearch" id="deletesearchsubmit">
+                                Submit
+                            </button>
+                        </td>
+                    </tr>
+                </table>                      
+            </form>
+            <table>
+                <tr>
+                    <th>
+                        Paper ID
+                    </th>
+                    <th>
+                        Scheme
+                    </th>
+                    <th>
+                        Branch
+                    </th>
+                    <th>
+                        Semester
+                    </th>
+                    <th>
+                        Exam Type
+                    </th>
+                    <th>
+                        Month
+                    </th>
+                    <th>
+                        Year
+                    </th>
+                    <th>
+                        Subject Code
+                    </th>
+                    <th>
+                        Subject
+                    </th>
+                    <th>
+                        Delete
+                    </th>
+                </tr>
+                {% for deletesearchresult in deletesearchresults %}
+                    <tr>
+                        <td>
+                            {{ deletesearchresult[0] }}
+                        </td>
+                        <td>
+                            {{ deletesearchresult[1] }}
+                        </td>
+                        <td>
+                            {{ deletesearchresult[2] }}
+                        </td>
+                        <td>
+                            {{ deletesearchresult[3] }}
+                        </td>
+                        <td>
+                            {{ deletesearchresult[4] }}
+                        </td>
+                        <td>
+                            {{ deletesearchresult[5] }}
+                        </td>
+                        <td>
+                            {{ deletesearchresult[6] }}
+                        </td>
+                        <td>
+                            {{ deletesearchresult[7] }}
+                        </td>
+                        <td>
+                            {{ deletesearchresult[8] }}
+                        </td>
+                        <td>
+                            <form method="POST">
+                                <input type="hidden" value="{{ deletesearchresult[0] }}" name="deletepaperid">
+                                <button type="submit" name="deletesubmit">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <input type="hidden" value="true" id="postformopen">
+        {% endif %}
+        <script src="{{ url_for('static', filename='js/mecqpadmin.js') }}">
+        </script>
+    </body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            MecQP
+        </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/mecqpadminlogin.css') }}">
+    </head>
+    <body>
+        <h1>
+            Admin Login
+        </h1>
+        <form method="POST" onsubmit="return loginValidate()">
+            <h2>
+                Enter Password:
+            </h2>
+            <input type="password" id="password" name="adminloginpassword">
+            <br>
+            <button type="submit">
+                Login
+            </button>
+        </form>
+        {% if wrongpassword %}
+            <h2>
+                Incorred password. Try again.
+            </h2>
+        {% endif %}
+        <script>
+            function loginValidate()
+            {
+                var password=document.querySelector("#password");
+                if(password.value==""){
+                    alert("Please enter password")
+                    return false;
+                }
+                return true;
+            }
+        </script>
+    </body>
+</html>

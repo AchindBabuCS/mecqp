@@ -29,4 +29,5 @@ function submitValidate(event)
             alert("Descriptiom cannot be blank");
             return false;
         }
+        return true;
     }

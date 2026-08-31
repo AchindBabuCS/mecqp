@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            MecQP
+        </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/mecqpabout.css') }}">
+    </head>
+    <body>
+        <h1>
+            About
+        </h1>
+        <p>
+            The about of mecqp. Created by Achind Babu, CU'29, MEC
+        </p>
+        <h2>
+            Message from Admin
+        </h2>
+        <pre>
+            {{ latestmessage[0] }}
+        </pre>
+        <h3>
+            Posted on {{ latestmessage[1] }}
+        </h3>
+        <h3>
+            Go back to homepage
+        </h3>
+        <a href="{{ url_for('home') }}" id="homeurl">
+            Home
+        </a>
+    </body>
+</html>
