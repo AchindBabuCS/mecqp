@@ -23,6 +23,7 @@
                 </h3>
                 <textarea type="text" id="description" name="description" rows="5" cols="20"></textarea>
                 <br><br>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <button type="submit" name="upload">
                     Submit
                 </button>

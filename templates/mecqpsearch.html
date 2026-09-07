@@ -231,11 +231,14 @@
                     <td>
                         <input type="text" id="Subject" name="subject">
                     </td>
+                    <td>
+                        <button type="submit">
+                            Search
+                        </button>
+                    </td>
                 </tr>
             </table>
-            <button type="submit">
-                Search
-            </button>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         </form>
         <br><br>
         <table id="searchresults" name="searchresults">
@@ -311,9 +314,11 @@
         <h3>
             Go back to homepage
         </h3>
-        <a href="{{ url_for('home') }}" id="homeurl">
-            Home
-        </a>
+        <div id="homeurl">
+            <a href="{{ url_for('home') }}" >
+                Home
+            </a>
+        </div>
         <script src="{{ url_for('static', filename='js/mecqpsearch.js') }}">
         </script>
     </body>

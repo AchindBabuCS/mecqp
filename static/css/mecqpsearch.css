@@ -12,5 +12,58 @@ p{
     font-size: xx-large;
 }
 #inputbox{
-    border: 1px;
+    border: 4px #0D47A1;
+    border-style: solid;
+    border-radius: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+select{
+    border: 4px black;
+    border-style: solid;
+}
+select option:nth-child(odd){
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: #E3F2FD;
+    font-weight: bold;
+}
+select option:nth-child(even){
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
+#Scheme ::picker(select){
+    border: 40px;
+}
+#searchresults,#searchresults th,#searchresults td{
+    border: 4px;
+    border-style: solid;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    padding: 5px;
+    border-color: darkblue;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+#searchresults tr:nth-child(even){
+    background-color: #E3F2FD;
+}
+#searchresults tr:nth-child(odd):not(:first-child){
+    background-color:deepskyblue;
+}
+input{
+    border: 4px black;
+    border-style: solid;
+}
+button{
+    border: 4px black;
+    border-style: solid;
+}
+h3{
+   text-align: center;
+}
+#homeurl a{
+    display: block;
+    text-align: center;
 }

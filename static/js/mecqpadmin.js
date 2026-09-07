@@ -4,6 +4,7 @@ const newbutton=document.querySelector("#New");
 const modifybutton=document.querySelector("#Modify");
 const updatebutton=document.querySelectorAll(".Update");
 const postformopen=document.querySelector("#postformopen");
+const csrfToken=document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 for (let i=0; i<updatebutton.length; i++){
     updatebutton[i].addEventListener("click", updatesubmissionform);
 }
@@ -20,6 +21,7 @@ function newsubmission(event)
     }else{
         newpaper.innerHTML=`
         <form method="POST" id="newsubmit" name="newsubmit" enctype="multipart/form-data" onsubmit="return newValidate()">
+            <input type="hidden" name="csrf_token" value="${csrfToken}">
             <table id="newinputbox">
                 <tr>
                     <th>
@@ -334,6 +336,7 @@ function updatesubmissionform(event)
     const updatesubject=event.target.dataset.updatesubject;
     modifypaperform.innerHTML=`
     <form method="POST" id="updatesubmit" name="updatesubmit" onsubmit="return updateValidate()">
+        <input type="hidden" name="csrf_token" value="${csrfToken}">
         <table id="updateinputbox">
             <tr>
                 <th>
@@ -453,6 +456,9 @@ function updatesubmissionform(event)
                     <select id="updateexam_type" name="updateexam_type">
                         <option>
                             Select
+                        </option>
+                        <option>
+                            All
                         </option>
                         <option>
                             Internal-1

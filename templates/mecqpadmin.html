@@ -4,6 +4,7 @@
         <title>
             MecQP
         </title>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/mecqpadmin.css') }}">
     </head>
     <body>
@@ -11,6 +12,7 @@
             Admin Page
         </h1>
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit" name="adminlogout">
                 Logout
             </button>
@@ -54,12 +56,14 @@
                     </td>
                     <td>
                         <form method="POST">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <input type="hidden" value="{{ submission[0] }}" name="acceptpaperid">
                             <button type="submit" name="acceptsubmission" id="acceptsubmission">
                                 &#10004;    
                             </button>
                         </form>
                         <form method="POST" onsubmit="return rejectValidate(event)">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <input type="hidden" value="{{ submission[0] }}" name="rejectpaperid">
                             <button type="submit" id="rejectsubmission" name="rejectsubmission">
                                 &#10006;       
@@ -79,6 +83,7 @@
             {% endfor %}
         </table>
         <form method="POST" onsubmit="return messageValidate()">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <textarea id="adminmessage" name="adminmessage" rows="5" cols="20"></textarea>
             <button type="submit" name="adminmessagesubmit">
                 Post
@@ -88,12 +93,14 @@
             New
         </button>
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit" name="modifybutton" id="Modify">
                 Modify
             </button>
         </form>
         {% if modifymode %}
             <form method="POST" id="modifysearch" name="modifysearch" onsubmit="return modifyValidate()">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <table id="modifysearchinputbox">
                     <tr>
                         <th>
@@ -380,12 +387,14 @@
             <input type="hidden" value="true" id="postformopen">
         {% endif %}
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit" name="deletebutton" id="Delete">
                 Delete
             </button>
         </form>
         {% if deletemode %}
             <form method="POST" id="deletesearch" name="deletesearch" onsubmit="return deleteValidate()">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <table id="deletesearchinputbox">
                     <tr>
                         <th>
@@ -663,6 +672,7 @@
                         </td>
                         <td>
                             <form method="POST">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <input type="hidden" value="{{ deletesearchresult[0] }}" name="deletepaperid">
                                 <button type="submit" name="deletesubmit">
                                     Delete

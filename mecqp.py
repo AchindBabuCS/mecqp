@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, request, session, url_for, s
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from flask_wtf.csrf import CSRFProtect
 import sqlite3
 import os
 ALLOWED_EXTENSIONS={'pdf'}
@@ -9,9 +10,16 @@ app=Flask(__name__)
 app.secret_key="0aa8b7b5b164a6f63a0fc9f17b2ce44ff8021164c245222c63074ef6c90cb7e8"
 passwordhash="scrypt:32768:8:1$WQvHUqGixZxourSo$febe6250106cb6d7eb97fae37896c55ecb4228955a42d681b5134b23340aabe424a848252110cd325c6643a9a5f46e1c4404371364ba7bf6a17aae1122ee539c"
 database="test.db"
+csrf=CSRFProtect(app)
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def get_submission():
+    with sqlite3.connect(database) as conn:
+        subimssionsquery="SELECT * FROM submissions WHERE status=1"
+        cur=conn.cursor()
+        cur.execute(subimssionsquery)
+        return cur.fetchall()
 @app.route("/")
 def home():    
     return render_template("mecqphome.html")
@@ -165,21 +173,35 @@ def about():
         return render_template("mecqpabout.html", latestmessage=latestmessage)
 @app.route("/adminlogin", methods=['GET','POST'])
 def adminlogin():
-    wrongpassword=False
-    if request.method=='POST':
-        if check_password_hash(passwordhash,request.form['adminloginpassword']):
-            session['admin']=True
-            return redirect(url_for("admin"))
+    with sqlite3.connect(database) as conn:
+        logincheckquery='SELECT * FROM loginattempts WHERE login_date=?'
+        loginattemptdate=datetime.today().strftime('%d.%m.%y')
+        cur=conn.cursor()
+        cur.execute(logincheckquery,(loginattemptdate,))
+        loginattempts=cur.fetchall()
+        if len(loginattempts)>5:
+            return render_template("adminlockedout.html")
         else:
-            wrongpassword=True
-            return render_template("mecqpadminlogin.html", wrongpassword=wrongpassword)
-    return render_template("mecqpadminlogin.html")
+            wrongpassword=False
+            if request.method=='POST':
+                if check_password_hash(passwordhash,request.form['adminloginpassword']):
+                    session['admin']=True
+                    return redirect(url_for("admin"))
+                else:
+                    loginattemptquery='''INSERT INTO loginattempts(login_date) VALUES(?)'''
+                    cur=conn.cursor()
+                    cur.execute(loginattemptquery,(loginattemptdate,))
+                    conn.commit()
+                    wrongpassword=True
+                    return render_template("mecqpadminlogin.html", wrongpassword=wrongpassword)
+            return render_template("mecqpadminlogin.html")
 @app.route("/admin", methods=['GET','POST'])
 def admin():
     if session.get("admin"):
         modifymode=False
         deletemode=False
         if request.method=='POST':
+            submissions=get_submission()
             if 'upload' in request.form:
                 if 'newfile' not in request.files:
                     return redirect(url_for("admin"))
@@ -198,7 +220,7 @@ def admin():
                         return redirect(url_for("admin"))
             if 'modifybutton' in request.form:
                 modifymode=True
-                return render_template("mecqpadmin.html", modifymode=modifymode)
+                return render_template("mecqpadmin.html", modifymode=modifymode, submissions=submissions)
             if 'modifysearch' in request.form:
                 modifymode=True
                 with sqlite3.connect(database) as conn:
@@ -267,7 +289,7 @@ def admin():
                     cur=conn.cursor()
                     cur.execute(modifysearchquery,modifysearchpm)
                     modifysearchresults=cur.fetchall()
-                    return render_template("mecqpadmin.html", modifymode=modifymode, modifysearchresults=modifysearchresults)
+                    return render_template("mecqpadmin.html", modifymode=modifymode, modifysearchresults=modifysearchresults, submissions=submissions)
             if 'updatesubmit' in request.form:
                 modifymode=False
                 with sqlite3.connect(database) as conn:
@@ -283,7 +305,7 @@ def admin():
                         else:
                             ifall=1
                     if ifall==1:
-                        return render_template("mecqpadmin.html", modifymode=modifymode)
+                        return render_template("mecqpadmin.html", modifymode=modifymode, submissions=submissions)
                     else:
                         modifysubmitquery=modifysubmitquery+" "+"SET"
                         if modifysubmitparameterlist[0]!='All':
@@ -340,10 +362,10 @@ def admin():
                         cur=conn.cursor()
                         cur.execute(modifysubmitquery,modifysubmitpm)
                         conn.commit()
-                        return render_template("mecqpadmin.html", modifymode=modifymode)
+                        return render_template("mecqpadmin.html", modifymode=modifymode, submissions=submissions)
             if 'deletebutton' in request.form:
                 deletemode=True
-                return render_template("mecqpadmin.html", deletemode=deletemode)
+                return render_template("mecqpadmin.html", deletemode=deletemode, submissions=submissions)
             if 'deletesearch' in request.form:
                 deletemode=True
                 with sqlite3.connect(database) as conn:
@@ -412,7 +434,7 @@ def admin():
                     cur=conn.cursor()
                     cur.execute(deletesearchquery,deletesearchpm)
                     deletesearchresults=cur.fetchall()
-                    return render_template("mecqpadmin.html", deletemode=deletemode, deletesearchresults=deletesearchresults)
+                    return render_template("mecqpadmin.html", deletemode=deletemode, deletesearchresults=deletesearchresults, submissions=submissions)
             if 'deletesubmit' in request.form:
                 deletemode=False
                 with sqlite3.connect(database) as conn:
@@ -425,7 +447,7 @@ def admin():
                     os.remove(f"papers/{deletefilenamerow[0]}")
                     cur.execute(deletefilequery,(deletefilenamepaperid,))
                     conn.commit()
-                    return render_template("mecqpadmin.html", deletemode=deletemode)
+                    return render_template("mecqpadmin.html", deletemode=deletemode, submissions=submissions)
             if 'acceptsubmission' in request.form:
                 with sqlite3.connect(database) as conn:
                     acceptpaperid=request.form["acceptpaperid"]
@@ -461,12 +483,8 @@ def admin():
                     conn.commit()
             if 'adminlogout' in request.form:
                 return redirect(url_for("adminlogout"))
-        with sqlite3.connect(database) as conn:
-            subimssionsquery="SELECT * FROM submissions WHERE status=1"
-            cur=conn.cursor()
-            cur.execute(subimssionsquery)
-            submissions=cur.fetchall()
-            return render_template("mecqpadmin.html", submissions=submissions)
+        submissions=get_submission()
+        return render_template("mecqpadmin.html", submissions=submissions)
     else:
         return redirect(url_for("adminlogin"))
 @app.route("/adminlogout")
