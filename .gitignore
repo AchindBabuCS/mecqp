@@ -1,0 +1,72 @@
+# =========================
+
+# Python
+
+# =========================
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# =========================
+
+# Virtual environments
+
+# =========================
+
+venv/
+.venv/
+env/
+ENV/
+
+# =========================
+
+# SQLite / local databases
+
+# =========================
+
+*.db
+*.sqlite
+*.sqlite3
+
+# =========================
+
+# Uploaded / generated files
+
+# =========================
+
+papers/*
+submissions/*
+
+# Keep the directories in Git
+
+!papers/.gitkeep
+!submissions/.gitkeep
+
+# =========================
+
+# Environment variables / secrets
+
+# =========================
+
+.env
+.env.*
+
+# =========================
+
+# IDE / editor files
+
+# =========================
+
+.vscode/
+.idea/
+
+# =========================
+
+# Operating system files
+
+# =========================
+
+.DS_Store
+Thumbs.db
+desktop.ini
