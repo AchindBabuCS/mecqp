@@ -3,12 +3,13 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_wtf.csrf import CSRFProtect
+from dotenv import load_dotenv
 import sqlite3
 import os
 ALLOWED_EXTENSIONS={'pdf'}
 app=Flask(__name__)
-app.secret_key="0aa8b7b5b164a6f63a0fc9f17b2ce44ff8021164c245222c63074ef6c90cb7e8"
-passwordhash="scrypt:32768:8:1$WQvHUqGixZxourSo$febe6250106cb6d7eb97fae37896c55ecb4228955a42d681b5134b23340aabe424a848252110cd325c6643a9a5f46e1c4404371364ba7bf6a17aae1122ee539c"
+app.secret_key=os.environ.get('SECRET_KEY')
+passwordhash=os.environ.get('PASSWORD_HASH')
 database="test.db"
 csrf=CSRFProtect(app)
 def allowed_file(filename):
