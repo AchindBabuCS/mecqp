@@ -2,6 +2,7 @@ const submit=document.querySelector("#submit");
 submit.addEventListener("submit", submitValidate);
 function submitValidate(event)
     {
+        var clickwrap=document.querySelector("#clickwrap");
         var uploadfile=document.querySelector("#file");
         var filedescription=document.querySelector("#description");
         if(uploadfile.files.length===0)
@@ -27,6 +28,12 @@ function submitValidate(event)
         {
             event.preventDefault();
             alert("Descriptiom cannot be blank");
+            return false;
+        }
+        if(!clickwrap.checked)
+        {
+            event.preventDefault();
+            alert("You have not agreed to Rules and Upload Conditions");
             return false;
         }
         return true;

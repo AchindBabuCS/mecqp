@@ -11,9 +11,10 @@
             Submit
         </h1>
         <p>
-            Upload and submit PYQPs of your own. </p><p>The upload PYQP will then checked and verified by the admin and may be accepted and added into the collection of papers or will be rejected.</p><p> If rejected, reason for rejection will be provided.</p><p> After submission, you will be provided a submission ID which you must remember to check the status of your submission.</p>
+            Upload and submit PYQPs of your own. The upload PYQP will then checked and verified by the admin and may be accepted and added into the collection of papers or will be rejected. If rejected, reason for rejection will be provided. After submission, you will be provided a submission ID which you must remember to check the status of your submission.
+        </p>
             <form method="POST" id="submit" name="submit" enctype="multipart/form-data">
-                <h3>
+                <h3 id="fileuploadheading">
                     File:
                 </h3>
                 <input type="file" id="file" name="file">
@@ -24,6 +25,11 @@
                 <textarea type="text" id="description" name="description" rows="5" cols="20"></textarea>
                 <br><br>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="checkbox" name="clickwrap" id="clickwrap">
+                <label for="clickwrap">
+                    I have read and undestood the Upload Rules and Potential Rejection Reasons
+                </label>
+                <br><br>
                 <button type="submit" name="upload">
                     Submit
                 </button>
@@ -79,6 +85,24 @@
                 <li>
                     Only PYQP PDFs must be uploaded.
                 </li>
+                <li>
+                    Do not intentionally alter, fabricate, or manipulate the contents of a question paper. If a paper has unavoidable scan defects or known corrections, mention them in the description.
+                </li>
+                <li>
+                    Do not submit files containing content unrelated to the question paper. For example, advertisements, promotional material, unrelated documents, etc.
+                </li>
+                <li>
+                    Do not submit the same paper multiple times unless the new submission is a clearer or more complete version of a paper already present in MecQP.
+                </li>
+                <li>
+                    The information provided in the description must be accurate to the best of the uploader's knowledge.
+                </li>
+                <li>
+                    Submitting a paper does not guarantee that it will be added to MecQP. All submissions are subject to review and verification by the administrator.
+                </li>
+                <li>
+                    MecQP may reject or remove a submission if it does not comply with these rules or if there is a concern regarding its authenticity, legality, copyright, privacy, or suitability for the repository.
+                </li>
             </ol>
             <h3>
                 Potential reasons for rejection:
@@ -98,6 +122,21 @@
                 </li>
                 <li>
                     File does not contain QP
+                </li>
+                <li>
+                    Paper is intentionally altered, fabricated, or manipulated
+                </li>
+                <li>
+                    Submission contains unrelated material
+                </li>
+                <li>
+                    Paper is already present in MecQP, unless the submission provides a substantially clearer or more complete version
+                </li>
+                <li>
+                    Description contains inaccurate or misleading information
+                </li>
+                <li>
+                    Submission fails administrator verification
                 </li>
             </ul>
         </p>
