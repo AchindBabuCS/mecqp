@@ -10,7 +10,7 @@ ALLOWED_EXTENSIONS={'pdf'}
 app=Flask(__name__)
 app.secret_key=os.environ.get('SECRET_KEY')
 passwordhash=os.environ.get('PASSWORD_HASH')
-database="test.db"
+database=os.environ.get('DATABASE')
 csrf=CSRFProtect(app)
 def allowed_file(filename):
     return '.' in filename and \

@@ -1,52 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
     <head>
         <title>
             MecQP
         </title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/mecqphome.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma/css/bulma.min.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            #hometitle{
+                font-size: 100px;
+            }
+        </style>
     </head>
     <body>
-        <h1>
-            MecQP
-        </h1>
-        <p>
-            A student-made online free repository for MECians.
-        </p>
-        <div id="search">
-            <a href="{{ url_for('search') }}" id="searchbutton">
-                Search
-            </a>
-            <p id="searchdef">
-                Search and find the PYQP you want
-            </p>
-        </div>
-        <br>
-        <div id="submit">
-            <a href="{{ url_for('submit') }}" id="searchbutton">
-                Submit
-            </a>
-            <p id="submitdef">
-                Upload and submit PYQP PDFs you possess
-            </p>
-        </div>
-        <br>
-        <div id="status">
-            <a href="{{ url_for('status') }}" id="searchbutton">
-                Status
-            </a>
-            <p id="statusdef">
-                Check the status of your submissions
-            </p>
-        </div>
-        <br>
-        <div id="about">
-            <a href="{{ url_for('about') }}" id="searchbutton">
-                About
-            </a>
-            <p id="aboutdef">
-                Site info
-            </p>
-        </div>
+        <section class="section">
+            <div class="container has-text-centered">
+                <h1 class="title is-1 has-text-info" id="hometitle">
+                    MecQP
+                </h1>
+                <p class="subtitle is-3">
+                    A student-made online free repository for MECians.
+                </p>
+            </div>
+        </section>
+        <section class="section">
+            <div id="search" class="box has-text-centered">
+                <a href="{{ url_for('search') }}" id="searchbutton" class="has-text-weight-medium is-size-2 has-text-info">
+                    Search
+                </a>
+                <p id="searchdef" class="subtitle is-4">
+                    Search and find the PYQP you want
+                </p>
+            </div>
+            <br>
+            <div id="submit" class="box has-text-centered">
+                <a href="{{ url_for('submit') }}" id="searchbutton" class="has-text-weight-medium is-size-2 has-text-info">
+                    Submit
+                </a>
+                <p id="submitdef" class="subtitle is-4">
+                    Upload and submit PYQP PDFs you possess
+                </p>
+            </div>
+            <br>
+            <div id="status" class="box has-text-centered">
+                <a href="{{ url_for('status') }}" id="searchbutton" class="has-text-weight-medium is-size-2 has-text-info">
+                    Status
+                </a>
+                <p id="statusdef" class="subtitle is-4">
+                    Check the status of your submissions
+                </p>
+            </div>
+            <br>
+            <div id="about" class="box has-text-centered">
+                <a href="{{ url_for('about') }}" id="searchbutton" class="has-text-weight-medium is-size-2 has-text-info">
+                    About
+                </a>
+                <p id="aboutdef" class="subtitle is-4">
+                    Site info
+                </p>
+            </div>
+        </section>
     </body>
 </html>

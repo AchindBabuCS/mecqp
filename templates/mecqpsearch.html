@@ -1,20 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
     <head>
         <title>
             MecQP
         </title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/mecqpsearch.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma/css/bulma.min.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            #searchtitle{
+                font-size: 100px;
+            }
+        </style>
     </head>
     <body>
-        <h1>
-            Search
-        </h1>
-        <p>
-            Input the details and search for the PYQP you want. All PYQPs are in PDF formats. Some may contain additional notes and corrections.
-        </p>
+        <section class="section">
+            <div class="container has-text-centered">
+                <h1 class="title is-1 has-text-info has-text-weight-bold" id="searchtitle">
+                    Search
+                </h1>
+                <p class="subtitle is-3">
+                    Input the details and search for the PYQP you want. All PYQPs are in PDF formats. Some may contain additional notes and corrections.
+                </p>
+            </div>
+        </section>
         <form id="papersearch" method="POST">
-            <table id="inputbox">
+            <table id="inputbox" class="table is-bordered is-narrow is-striped is-hoverable is-fullwidth">
                 <tr>
                     <th>
                         Scheme
@@ -40,199 +50,214 @@
                     <th>
                         Subject
                     </th>
+                    <th>
+                        Search
+                    </th>
                 </tr>
                 <tr>
                     <td>
-                        <select id="Scheme" name="scheme">
-                            <option>
-                                Select 
-                            </option>
-                            <option>
-                                All
-                            </option>
-                            <option>
-                                2019
-                            </option>
-                            <option>
-                                2024
-                            </option>
-                        </select>
+                        <div class="select">
+                            <select id="Scheme" name="scheme">
+                                <option>
+                                    Select 
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    2019
+                                </option>
+                                <option>
+                                    2024
+                                </option>
+                            </select>
+                        </div>
                     </td>
                     <td>
-                        <select id="Branch" name="branch">
-                            <option>
-                                Select
-                            </option>
-                            <option>
-                                All
-                            </option>
-                            <option>
-                                CSE
-                            </option>
-                            <option>
-                                CSBS
-                            </option>
-                            <option>
-                                EC
-                            </option>
-                            <option>
-                                EB
-                            </option>
-                            <option>
-                                EV
-                            </option>
-                            <option>
-                                EEE
-                            </option>
-                            <option>
-                                ME
-                            </option>
-                        </select>
+                        <div class="select">
+                            <select id="Branch" name="branch">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    CSE
+                                </option>
+                                <option>
+                                    CSBS
+                                </option>
+                                <option>
+                                    EC
+                                </option>
+                                <option>
+                                    EB
+                                </option>
+                                <option>
+                                    EV
+                                </option>
+                                <option>
+                                    EEE
+                                </option>
+                                <option>
+                                    ME
+                                </option>
+                            </select>
+                        </div>
                     </td>
                     <td>
-                        <select id="Semester" name="semester">
-                            <option>
-                                Select
-                            </option>
-                            <option>
-                                All
-                            </option>
-                            <option>
-                                1
-                            </option>
-                            <option>
-                                2
-                            </option>
-                            <option>
-                                3
-                            </option>
-                            <option>
-                                4
-                            </option>
-                            <option>
-                                5
-                            </option>
-                            <option>
-                                6
-                            </option>
-                            <option>
-                                7
-                            </option>
-                            <option>
-                                8
-                            </option>
-                        </select>
+                        <div class="select">
+                            <select id="Semester" name="semester">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    1
+                                </option>
+                                <option>
+                                    2
+                                </option>
+                                <option>
+                                    3
+                                </option>
+                                <option>
+                                    4
+                                </option>
+                                <option>
+                                    5
+                                </option>
+                                <option>
+                                    6
+                                </option>
+                                <option>
+                                    7
+                                </option>
+                                <option>
+                                    8
+                                </option>
+                            </select>
+                        </div>
                     </td>
                     <td>
-                        <select id="Exam_Type" name="exam_type">
-                            <option>
-                                Select
-                            </option>
-                            <option>
-                                All
-                            </option>
-                            <option>
-                                Internal-1
-                            </option>
-                            <option>
-                                Internal-2
-                            </option>
-                            <option>
-                                Semester-R
-                            </option>
-                            <option>
-                                Semester-S
-                            </option>
-                        </select>
+                        <div class="select">
+                            <select id="Exam_Type" name="exam_type">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    Internal-1
+                                </option>
+                                <option>
+                                    Internal-2
+                                </option>
+                                <option>
+                                    Semester-R
+                                </option>
+                                <option>
+                                    Semester-S
+                                </option>
+                            </select>
+                        </div>
                     </td>
                     <td>
-                        <select id="Month" name="month">
-                            <option>
-                                Select
-                            </option>
-                            <option>
-                                All
-                            </option>
-                            <option>
-                                January
-                            </option>
-                            <option>
-                                February
-                            </option>
-                            <option>
-                                March
-                            </option>
-                            <option>
-                                April
-                            </option>
-                            <option>
-                                May
-                            </option>
-                            <option>
-                                June
-                            </option>
-                            <option>
-                                July
-                            </option>
-                            <option>
-                                August
-                            </option>
-                            <option>
-                                September
-                            </option>
-                            <option>
-                                October
-                            </option>
-                            <option>
-                                November
-                            </option>
-                            <option>
-                                December
-                            </option>
-                        </select>
+                        <div class="select">
+                            <select id="Month" name="month">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    January
+                                </option>
+                                <option>
+                                    February
+                                </option>
+                                <option>
+                                    March
+                                </option>
+                                <option>
+                                    April
+                                </option>
+                                <option>
+                                    May
+                                </option>
+                                <option>
+                                    June
+                                </option>
+                                <option>
+                                    July
+                                </option>
+                                <option>
+                                    August
+                                </option>
+                                <option>
+                                    September
+                                </option>
+                                <option>
+                                    October
+                                </option>
+                                <option>
+                                    November
+                                </option>
+                                <option>
+                                    December
+                                </option>
+                            </select>
+                        </div>
                     </td>
                     <td>
-                        <select id="Year" name="year">
-                            <option>
-                                Select
-                            </option>
-                            <option>
-                                All
-                            </option>
-                            <option>
-                                2026
-                            </option>
-                            <option>
-                                2025
-                            </option>
-                            <option>
-                                2024
-                            </option>
-                            <option>
-                                2023
-                            </option>
-                            <option>
-                                2022
-                            </option>
-                            <option>
-                                2021
-                            </option>
-                            <option>
-                                2020
-                            </option>
-                            <option>
-                                2019
-                            </option>
-                        </select>
+                        <div class="select">
+                            <select id="Year" name="year">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    2026
+                                </option>
+                                <option>
+                                    2025
+                                </option>
+                                <option>
+                                    2024
+                                </option>
+                                <option>
+                                    2023
+                                </option>
+                                <option>
+                                    2022
+                                </option>
+                                <option>
+                                    2021
+                                </option>
+                                <option>
+                                    2020
+                                </option>
+                                <option>
+                                    2019
+                                </option>
+                            </select>
+                        </div>
                     </td>
                     <td>
-                        <input type="text" id="Subject_Code" name="subject_code">
+                        <input type="text" id="Subject_Code" name="subject_code" class="input">
                     </td>
                     <td>
-                        <input type="text" id="Subject" name="subject">
+                        <input type="text" id="Subject" name="subject" class="input">
                     </td>
                     <td>
-                        <button type="submit">
+                        <button type="submit" class="button is-primary is-dark">
                             Search
                         </button>
                     </td>
@@ -241,7 +266,7 @@
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         </form>
         <br><br>
-        <table id="searchresults" name="searchresults">
+        <table id="searchresults" name="searchresults" class="table is-bordered is-narrow is-striped is-hoverable is-fullwidth">
             <tr>
                 <th>
                     SL.NO
@@ -270,7 +295,7 @@
                 <th>
                     Subject
                 </th>
-                <th>
+                <th id="stickyh">
                     Download Link
                 </th>
             </tr>
@@ -311,14 +336,17 @@
                 </tr>
             {% endfor %}
         </table>
-        <h3>
-            Go back to homepage
-        </h3>
-        <div id="homeurl">
-            <a href="{{ url_for('home') }}" >
-                Home
-            </a>
+        <div class="container has-text-centered">
+            <h3>
+                Go back to homepage
+            </h3>
+            <div id="homeurl">
+                <a href="{{ url_for('home') }}" >
+                    Home
+                </a>
+            </div>
         </div>
+        <br><br>
         <script src="{{ url_for('static', filename='js/mecqpsearch.js') }}">
         </script>
     </body>
