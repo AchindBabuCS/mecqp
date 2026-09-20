@@ -20,221 +20,249 @@ function newsubmission(event)
         event.preventDefault();
     }else{
         newpaper.innerHTML=`
-        <form method="POST" id="newsubmit" name="newsubmit" enctype="multipart/form-data" onsubmit="return newValidate()">
-            <input type="hidden" name="csrf_token" value="${csrfToken}">
-            <table id="newinputbox">
-                <tr>
-                    <th>
-                        Scheme
-                    </th>
-                    <th>
-                        Branch
-                    </th>
-                    <th>
-                        Semester
-                    </th>
-                    <th>
-                        Exam Type
-                    </th>
-                    <th>
-                        Month
-                    </th>
-                    <th>
-                        Year
-                    </th>
-                    <th>
-                        Subject Code
-                    </th>
-                    <th>
-                        Subject
-                    </th>
-                    <th>
-                        File
-                    </th>
-                </tr>
-                <tr>
-                    <td>
-                        <select id="newscheme" name="newscheme">
-                            <option>
-                                Select
-                            </option>
-                            <option>
-                                2019
-                            </option>
-                            <option>
-                                2024
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <select id="newbranch" name="newbranch">
-                            <option>
-                                Select
-                            </option>
-                            <option>
-                                CSE
-                            </option>
-                            <option>
-                                CSBS
-                            </option>
-                            <option>
-                                EC
-                            </option>
-                            <option>
-                                EB
-                            </option>
-                            <option>
-                                EV
-                            </option>
-                            <option>
-                                EEE
-                            </option>
-                            <option>
-                                ME
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <select id="newsemester" name="newsemester">
-                            <option>
-                                Select
-                            </option>
-                            <option>                    
-                                1
-                            </option>
-                            <option>
-                                2
-                            </option>
-                            <option>
-                                3
-                            </option>
-                            <option>
-                                4
-                            </option>
-                            <option>
-                                5
-                            </option>
-                            <option>
-                                6
-                            </option>
-                            <option>
-                                7
-                            </option>
-                            <option>
-                                8
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <select id="newexam_type" name="newexam_type">
-                            <option>
-                                Select
-                            </option>
-                            <option>
-                                Internal-1
-                            </option>
-                            <option>
-                                Internal-2
-                            </option>
-                            <option>
-                                Semester-R
-                            </option>
-                            <option>
-                                Semester-S
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <select id="newmonth" name="newmonth">
-                            <option>
-                                Select
-                            </option>
-                            <option>
-                                January
-                            </option>
-                            <option>
-                                February
-                            </option>
-                            <option>
-                                March
-                            </option>
-                            <option>
-                                April
-                            </option>
-                            <option>
-                                May
-                            </option>
-                            <option>
-                                June
-                            </option>
-                            <option>
-                                July
-                            </option>
-                            <option>
-                                August
-                            </option>
-                            <option>
-                                September
-                            </option>
-                            <option>
-                                October
-                            </option>
-                            <option>
-                                November
-                            </option>
-                            <option>
-                                December
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <select id="newyear" name="newyear">
-                            <option>
-                                Select
-                            </option>
-                            <option>
-                                2026
-                            </option>
-                            <option>
-                                2025
-                            </option>
-                            <option>
-                                2024
-                            </option>
-                            <option>
-                                2023
-                            </option>
-                            <option>
-                                2022
-                            </option>
-                            <option>
-                                2021
-                            </option>
-                            <option>
-                                2020
-                            </option>
-                            <option>
-                                2019
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <input type="text" id="newsubject_code" name="newsubject_code">
-                    </td>
-                    <td>
-                        <input type="text" id="newsubject" name="newsubject">
-                    </td>
-                    <td>
-                        <input type="file" id="newfile" name="newfile">
-                    </td>
-                    <td>
-                        <button type="submit" name="upload" id="newsubmitbutton">
+        <section class="section">
+            <form method="POST" id="newsubmit" name="newsubmit" enctype="multipart/form-data" onsubmit="return newValidate()">
+                <input type="hidden" name="csrf_token" value="${csrfToken}">
+                <table id="newinputbox" class="table is-bordered is-narrow is-striped is-hoverable is-fullwidth">
+                    <tr>
+                        <th>
+                            Scheme
+                        </th>
+                        <th>
+                            Branch
+                        </th>
+                        <th>
+                            Semester
+                        </th>
+                        <th>
+                            Exam Type
+                        </th>
+                        <th>
+                            Month
+                        </th>
+                        <th>
+                            Year
+                        </th>
+                        <th>
+                            Subject Code
+                        </th>
+                        <th>
+                            Subject
+                        </th>
+                        <th>
+                            File
+                        </th>
+                        <th>
                             Submit
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </form>`;
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="select">
+                                <select id="newscheme" name="newscheme">
+                                    <option>
+                                        Select
+                                    </option>
+                                    <option>
+                                        2019
+                                    </option>
+                                    <option>
+                                        2024
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="select">
+                                <select id="newbranch" name="newbranch">
+                                    <option>
+                                        Select
+                                    </option>
+                                    <option>
+                                        CSE
+                                    </option>
+                                    <option>
+                                        CSBS
+                                    </option>
+                                    <option>
+                                        EC
+                                    </option>
+                                    <option>
+                                        EB
+                                    </option>
+                                    <option>
+                                        EV
+                                    </option>
+                                    <option>
+                                        EEE
+                                    </option>
+                                    <option>
+                                        ME
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="select">
+                                <select id="newsemester" name="newsemester">
+                                    <option>
+                                        Select
+                                    </option>
+                                    <option>                    
+                                        1
+                                    </option>
+                                    <option>
+                                        2
+                                    </option>
+                                    <option>
+                                        3
+                                    </option>
+                                    <option>
+                                        4
+                                    </option>
+                                    <option>
+                                        5
+                                    </option>
+                                    <option>
+                                        6
+                                    </option>
+                                    <option>
+                                        7
+                                    </option>
+                                    <option>
+                                        8
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="select">
+                                <select id="newexam_type" name="newexam_type">
+                                    <option>
+                                        Select
+                                    </option>
+                                    <option>
+                                        Internal-1
+                                    </option>
+                                    <option>
+                                        Internal-2
+                                    </option>
+                                    <option>
+                                        Semester-R
+                                    </option>
+                                    <option>
+                                        Semester-S
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="select">
+                                <select id="newmonth" name="newmonth">
+                                    <option>
+                                        Select
+                                    </option>
+                                    <option>
+                                        January
+                                    </option>
+                                    <option>
+                                        February
+                                    </option>
+                                    <option>
+                                        March
+                                    </option>
+                                    <option>
+                                        April
+                                    </option>
+                                    <option>
+                                        May
+                                    </option>
+                                    <option>
+                                        June
+                                    </option>
+                                    <option>
+                                        July
+                                    </option>
+                                    <option>
+                                        August
+                                    </option>
+                                    <option>
+                                        September
+                                    </option>
+                                    <option>
+                                        October
+                                    </option>
+                                    <option>
+                                        November
+                                    </option>
+                                    <option>
+                                        December
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="select">
+                                <select id="newyear" name="newyear">
+                                    <option>
+                                        Select
+                                    </option>
+                                    <option>
+                                        2026
+                                    </option>
+                                    <option>
+                                        2025
+                                    </option>
+                                    <option>
+                                        2024
+                                    </option>
+                                    <option>
+                                        2023
+                                    </option>
+                                    <option>
+                                        2022
+                                    </option>
+                                    <option>
+                                        2021
+                                    </option>
+                                    <option>
+                                        2020
+                                    </option>
+                                    <option>
+                                        2019
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="text" id="newsubject_code" name="newsubject_code" class="input">
+                        </td>
+                        <td>
+                            <input type="text" id="newsubject" name="newsubject" class="input">
+                        </td>
+                        <td>
+                            <div class="file">
+                                <label class="file-label">
+                                    <input type="file" id="newfile" name="newfile" class="file-input">
+                                    <span class="file-cta">
+                                        <i class="fas fa-upload">
+                                        </i>
+                                        <span class="file-label">
+                                            Choose a file...
+                                        </span>
+                                    </span>
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="submit" name="upload" id="newsubmitbutton" class="button is-primary is-dark">
+                                Submit
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </section>`;
         document.body.appendChild(newpaper);
         formopen=true;
     }
@@ -335,239 +363,256 @@ function updatesubmissionform(event)
     const updatesubject_code=event.target.dataset.updatesubject_code;
     const updatesubject=event.target.dataset.updatesubject;
     modifypaperform.innerHTML=`
-    <form method="POST" id="updatesubmit" name="updatesubmit" onsubmit="return updateValidate()">
-        <input type="hidden" name="csrf_token" value="${csrfToken}">
-        <table id="updateinputbox">
-            <tr>
-                <th>
-                    Paper ID
-                </th>
-                <th>
-                    Scheme
-                </th>
-                <th>
-                    Branch
-                </th>
-                <th>
-                    Semester
-                </th>
-                <th>
-                    Exam Type
-                </th>
-                <th>
-                    Month
-                </th>
-                <th>
-                    Year
-                </th>
-                <th>
-                    Subject Code
-                </th>
-                <th>
-                    Subject
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <input type="text" id="updatepaperid" name="updatepaperid" value="${updatepaperid}" readonly>
-                </td>
-                <td>
-                    <select id="updatescheme" name="updatescheme">
-                        <option>
-                            Select
-                        </option>
-                        <option>
-                            All
-                        </option>
-                        <option>
-                            2019
-                        </option>
-                        <option>
-                            2024
-                        </option>
-                    </select>
-                </td>
-                <td>
-                    <select id="updatebranch" name="updatebranch">
-                        <option>
-                            Select  
-                        </option>
-                        <option>
-                            All
-                        </option>
-                        <option>
-                            CSE
-                        </option>
-                        <option>
-                            CSBS
-                        </option>
-                        <option>
-                            EC
-                        </option>
-                        <option>
-                            EB
-                        </option>
-                        <option>
-                            EV
-                        </option>
-                        <option>
-                            EEE
-                        </option>
-                        <option>
-                            ME
-                        </option>
-                    </select>
-                </td>
-                <td>
-                    <select id="updatesemester" name="updatesemester">
-                        <option>
-                            Select
-                        </option>
-                        <option>
-                            All
-                        </option>
-                        <option>
-                            1
-                        </option>
-                        <option>
-                            2
-                        </option>
-                        <option>
-                            3
-                        </option>
-                        <option>
-                            4
-                        </option>
-                        <option>
-                            5
-                        </option>
-                        <option>
-                            6
-                        </option>
-                        <option>
-                            7
-                        </option>
-                        <option>
-                            8
-                        </option>
-                    </select>
-                </td>
-                <td>
-                    <select id="updateexam_type" name="updateexam_type">
-                        <option>
-                            Select
-                        </option>
-                        <option>
-                            All
-                        </option>
-                        <option>
-                            Internal-1
-                        </option>
-                        <option>
-                            Internal-2
-                        </option>
-                        <option>
-                            Semester-R
-                        </option>
-                        <option>
-                            Semester-S
-                        </option>
-                    </select>
-                </td>
-                <td>
-                    <select id="updatemonth" name="updatemonth">
-                        <option>
-                            Select
-                        </option>
-                        <option>
-                            All
-                        </option>
-                        <option>
-                            January
-                        </option>
-                        <option>
-                            February
-                        </option>
-                        <option>
-                            March
-                        </option>
-                        <option>
-                            April
-                        </option>
-                        <option>
-                            May
-                        </option>
-                        <option>
-                            June
-                        </option>
-                        <option>
-                            July
-                        </option>
-                        <option>
-                            August
-                        </option>
-                        <option>
-                            September
-                        </option>
-                        <option>
-                            October
-                        </option>
-                        <option>
-                            November
-                        </option>
-                        <option>
-                            December
-                        </option>
-                    </select>
-                </td>
-                <td>
-                    <select id="updateyear" name="updateyear">
-                        <option>
-                            Select
-                        </option>
-                        <option>
-                            All
-                        </option>
-                        <option>
-                            2026
-                        </option>
-                        <option>
-                            2025
-                        </option>
-                        <option>
-                            2024
-                        </option>
-                        <option>
-                            2023
-                        </option>
-                        <option>
-                            2022
-                        </option>
-                        <option>
-                            2021
-                        </option>
-                        <option>
-                            2020
-                        </option>
-                        <option>
-                            2019
-                        </option>
-                    </select>
-                </td>
-                <td>
-                    <input type="text" id="updatesubject_code" name="updatesubjectcode" value="${updatesubject_code}" readonly>
-                </td>
-                <td>
-                    <input type="text" id="updatesubject" name="updatesubject" value="${updatesubject}" readonly>
-                </td>
-                <td>
-                    <button type="submit" name="updatesubmit" id="updatesubmitbutton">
-                        Submit
-                    </button>
-                </td>
-            </tr>
-        </table>
-    </form>`;
+    <section class="section">
+        <form method="POST" id="updatesubmit" name="updatesubmit" onsubmit="return updateValidate()">
+            <input type="hidden" name="csrf_token" value="${csrfToken}">
+            <table id="updateinputbox" class="table is-bordered is-narrow is-striped is-hoverable is-fullwidth">
+                <tr>
+                    <th>
+                        Paper ID
+                    </th>
+                    <th>
+                        Scheme
+                    </th>
+                    <th>
+                        Branch
+                    </th>
+                    <th>
+                        Semester
+                    </th>
+                    <th>
+                        Exam Type
+                    </th>
+                    <th>
+                        Month
+                    </th>
+                    <th>
+                        Year
+                    </th>
+                    <th>
+                        Subject Code
+                    </th>
+                    <th>
+                        Subject
+                    </th>
+                    <th>
+                        Update
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" id="updatepaperid" name="updatepaperid" value="${updatepaperid}" readonly class="input">
+                    </td>
+                    <td>
+                        <div class="select">
+                            <select id="updatescheme" name="updatescheme">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    2019
+                                </option>
+                                <option>
+                                    2024
+                                </option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="select">
+                            <select id="updatebranch" name="updatebranch">
+                                <option>
+                                    Select  
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    CSE
+                                </option>
+                                <option>
+                                    CSBS
+                                </option>
+                                <option>
+                                    EC
+                                </option>
+                                <option>
+                                    EB
+                                </option>
+                                <option>
+                                    EV
+                                </option>
+                                <option>
+                                    EEE
+                                </option>
+                                <option>
+                                    ME
+                                </option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="select">
+                            <select id="updatesemester" name="updatesemester">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    1
+                                </option>
+                                <option>
+                                    2
+                                </option>
+                                <option>
+                                    3
+                                </option>
+                                <option>
+                                    4
+                                </option>
+                                <option>
+                                    5
+                                </option>
+                                <option>
+                                    6
+                                </option>
+                                <option>
+                                    7
+                                </option>
+                                <option>
+                                    8
+                                </option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="select">
+                            <select id="updateexam_type" name="updateexam_type">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    Internal-1
+                                </option>
+                                <option>
+                                    Internal-2
+                                </option>
+                                <option>
+                                    Semester-R
+                                </option>
+                                <option>
+                                    Semester-S
+                                </option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="select">
+                            <select id="updatemonth" name="updatemonth">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    January
+                                </option>
+                                <option>
+                                    February
+                                </option>
+                                <option>
+                                    March
+                                </option>
+                                <option>
+                                    April
+                                </option>
+                                <option>
+                                    May
+                                </option>
+                                <option>
+                                    June
+                                </option>
+                                <option>
+                                    July
+                                </option>
+                                <option>
+                                    August
+                                </option>
+                                <option>
+                                    September
+                                </option>
+                                <option>
+                                    October
+                                </option>
+                                <option>
+                                    November
+                                </option>
+                                <option>
+                                    December
+                                </option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="select">
+                            <select id="updateyear" name="updateyear">
+                                <option>
+                                    Select
+                                </option>
+                                <option>
+                                    All
+                                </option>
+                                <option>
+                                    2026
+                                </option>
+                                <option>
+                                    2025
+                                </option>
+                                <option>
+                                    2024
+                                </option>
+                                <option>
+                                    2023
+                                </option>
+                                <option>
+                                    2022
+                                </option>
+                                <option>
+                                    2021
+                                </option>
+                                <option>
+                                    2020
+                                </option>
+                                <option>
+                                    2019
+                                </option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <input type="text" id="updatesubject_code" name="updatesubjectcode" value="${updatesubject_code}" readonly class="input">
+                    </td>
+                    <td>
+                        <input type="text" id="updatesubject" name="updatesubject" value="${updatesubject}" readonly class="input">
+                    </td>
+                    <td>
+                        <button type="submit" name="updatesubmit" id="updatesubmitbutton" class="button is-warning is-dark">
+                            Submit
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </section>`;
     document.body.appendChild(modifypaperform);
     formopen=true;
 }
