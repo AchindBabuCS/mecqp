@@ -1,27 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
     <head>
         <title>
             MecQP
         </title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/mecqpabout.css') }}">
-    </head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma/css/bulma.min.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     <body>
-        <h1>
-            About
-        </h1>
-        <p>
-            The about of mecqp. Created by Achind Babu, CU'29, MEC
-        </p>
-        <h2>
-            Message from Admin
-        </h2>
-        <pre>
-            {{ latestmessage[0] }}
-        </pre>
-        <h3>
-            Posted on {{ latestmessage[1] }}
-        </h3>
+        <section class="section">
+            <div class="container has-text-centered">
+                <h1 class="title is-1 has-text-info has-text-weight-bold">
+                    About
+                </h1>
+            </div>
+        </section>
+        <section class="section">
+            <div class="content has-text-centered">
+                <p>
+                    Created by Achind Babu, CU'29, MEC
+                </p>
+                <h2>
+                    Message from Admin
+                </h2>
+                <h3 class="has-text-weight-medium is-2">
+                    {{ latestmessage[0] }}
+                </h3>
+                <h3>
+                    Posted on {{ latestmessage[1] }}
+                </h3>
+            </div>
+        </section>
         <h3>
             Go back to homepage
         </h3>
