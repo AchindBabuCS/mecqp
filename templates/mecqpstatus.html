@@ -1,61 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
     <head>
         <title>
             MecQP
         </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma/css/bulma.min.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            .id-column{
+                width: 100px;
+            }
+        </style>
     </head>
     <body>
-        <h3>
-            Go back to homepage
-        </h3>
-        <a href="{{ url_for('home') }}" id="homeurl">
-            Home
-        </a>
-        <table id="statusresults" name="statusresults">
-            <tr>
-                <th>
-                    Submission ID
-                </th>
-                <th>
+        <section class="section">
+            <div class="container has-text-centered">
+                <h1 class="title is-1 has-text-info has-text-weight-bold">
                     Status
-                </th>
-                <th>
-                    Reason
-                </th>
-            </tr>
-            {% for result in results %}
+                </h1>
+                <p class="subtitle is-3">
+                    Check the status of your submissions
+                </p>
+            </div>
+        </section>
+        <section class="section">
+            <table id="statusresults" name="statusresults" class="table is-bordered is-narrow is-striped is-hoverable is-fullwidth">
                 <tr>
-                    <td>
-                        {{ result[0] }}
-                    </td>
-                    <td>
-                        {% if result[1] == 2 %}
-                            <p>
-                                Approved
-                            </p>
-                        {% elif result[1] == 0 %}
-                            <p>
-                                Rejected
-                            </p>
-                        {% else %}
-                            <p>
-                                Pending
-                            </p>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if result[1] == 0 %}
-                            <p>
-                                {{ result[2] }}
-                            </p>
-                        {% else %}
-                            <p>
-                            </p>
-                        {% endif %}
-                    </td>
+                    <th class="id-column">
+                        Submission ID
+                    </th>
+                    <th class="id-column">
+                        Status
+                    </th>
+                    <th>
+                        Reason
+                    </th>
                 </tr>
-            {% endfor %}
-        </table>
+                {% for result in results %}
+                    <tr>
+                        <td class="id-column">
+                            {{ result[0] }}
+                        </td>
+                        <td>
+                            {% if result[1] == 2 %}
+                                <p class="id-column has-text-success">
+                                    Approved
+                                </p>
+                            {% elif result[1] == 0 %}
+                                <p class="id-column has-text-danger">
+                                    Rejected
+                                </p>
+                            {% else %}
+                                <p class="id-column">
+                                    Pending
+                                </p>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if result[1] == 0 %}
+                                <div class="container has-text-centered">
+                                    <p>
+                                        {{ result[2] }}
+                                    </p>
+                                </div>
+                            {% else %}
+                                <p>
+                                </p>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </section>
+        <section class="section">
+            <div class="container has-text-centered">
+                <h3>
+                    Go back to homepage
+                </h3>
+                <a href="{{ url_for('home') }}" id="homeurl">
+                    Home
+                </a>
+            </div>
+        </section>
     </body>
 </html>
