@@ -1,13 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
     <head>
         <title>
             MecQP
         </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma/css/bulma.min.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            #lockedtitle{
+                font-size: 100px;
+            }
+        </style>
     </head>
     <body>
-        <h1>
-            Too many login attempts. Try again tomorrow.
-        </h1>
+        <section class="section">
+            <div class="container has-text-centered">
+                <h1 class="title is-1 has-text-info has-text-weight-bold" id="lockedtitle">
+                    Too many login attempts. Try again tomorrow.
+                </h1>
+            </div>
+        </section>
     </body>
 </html>

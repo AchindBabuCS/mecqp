@@ -1,17 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
     <head>
         <title>
             MecQP
         </title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/mecqpadminlogout.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma/css/bulma.min.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            #logouttitle{
+                font-size: 100px;
+            }
+        </style>
     </head>
     <body>
-        <h1>
-            Admin Logout
-        </h1>
-        <h3>
-            You have logged out
-        </h3>
+        <section class="section">
+            <div class="container has-text-centered">
+                <h1 class="title is-1 has-text-info has-text-weight-bold" id="logouttitle">
+                    Admin Logout
+                </h1>
+                <h3 class="subtitle is-3">
+                    You have logged out
+                </h3>
+            </div>
+        </section>
     </body>
 </html>

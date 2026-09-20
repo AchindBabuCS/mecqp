@@ -366,6 +366,9 @@ def admin():
                         cur.execute(modifysubmitquery,modifysubmitpm)
                         conn.commit()
                         return render_template("mecqpadmin.html", modifymode=modifymode, submissions=submissions)
+            if 'closemodifymode' in request.form:
+                modifymode=False
+                return render_template("mecqpadmin.html", modifymode=modifymode, submissions=submissions)
             if 'deletebutton' in request.form:
                 deletemode=True
                 return render_template("mecqpadmin.html", deletemode=deletemode, submissions=submissions)
@@ -451,6 +454,9 @@ def admin():
                     cur.execute(deletefilequery,(deletefilenamepaperid,))
                     conn.commit()
                     return render_template("mecqpadmin.html", deletemode=deletemode, submissions=submissions)
+            if 'closedeletemode' in request.form:
+                deletemode=False
+                render_template("mecqpadmin.html", deletemode=deletemode, submissions=submissions)
             if 'acceptsubmission' in request.form:
                 with sqlite3.connect(database) as conn:
                     acceptpaperid=request.form["acceptpaperid"]

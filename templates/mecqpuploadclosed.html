@@ -1,23 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
     <head>
         <title>
             MecQP
         </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma/css/bulma.min.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            #closedtitle{
+                font-size: 100px;
+            }
+        </style>
     </head>
     <body>
-        <h1>
-            Uploads Closed
-        </h1>
-        <p>
-            Sorry, today's upload quota has been exhausted. Please wait till tomorrow when quota refreshes.
-        </p>
-        <br>
-        <h3>
-            Go back to homepage
-        </h3>
-        <a href="{{ url_for('home') }}" id="homeurl">
-            Home
-        </a>
+        <section class="section">
+            <div class="container has-text-centered">
+                <h1 class="title is-1 has-text-info has-text-weight-bold" id="closedtitle">
+                    Uploads Closed
+                </h1>
+                <p class="subtitle is-3">
+                    Sorry, today's upload quota has been exhausted. Please wait till tomorrow when quota refreshes.
+                </p>
+            </div>
+        </section>
+        <section class="section">
+            <div class="container has-text-centered">
+                <h3>
+                    Go back to homepage
+                </h3>
+                <a href="{{ url_for('home') }}" id="homeurl">
+                    Home
+                </a>
+            </div>
+        </section>
     </body>
 </html>

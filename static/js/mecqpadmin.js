@@ -262,9 +262,16 @@ function newsubmission(event)
                     </tr>
                 </table>
             </form>
+            <div class="container has-text-centered">
+                <button id="closenewform" class="button is-primary is-dark">
+                    Close New Form
+                </button>
+            </div>
         </section>`;
         document.body.appendChild(newpaper);
         formopen=true;
+        const closenewform=document.querySelector("#closenewform");
+        closenewform.addEventListener("click", closenewformfunction);
     }
 }
 function newValidate(){
@@ -314,6 +321,11 @@ function newValidate(){
         return false;
     }
     return true;
+}
+function closenewformfunction()
+{
+    document.body.removeChild(newpaper);
+    formopen=false;
 }
 function modifysearchformcheck(event)
 {

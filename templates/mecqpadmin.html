@@ -448,6 +448,14 @@
                         </tr>
                 {% endfor %}
                 </table>
+                <div class="container has-text-centered">
+                    <form method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" name="closemodifymode" id="closemodifymode" class="button is-primary is-dark">
+                            Close Modify Mode
+                        </button>
+                    </form>
+                </div>
                 <input type="hidden" value="true" id="postformopen">
             {% endif %}
         </section>
@@ -757,6 +765,14 @@
                         </tr>
                     {% endfor %}
                 </table>
+                <div class="container has-text-centered">
+                    <form method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" name="closedeletemode" id="closedeletemode" class="button is-primary is-dark">
+                            Close Delete Mode
+                        </button>
+                    </form>
+                </div>
                 <input type="hidden" value="true" id="postformopen">
             {% endif %}
         </section>

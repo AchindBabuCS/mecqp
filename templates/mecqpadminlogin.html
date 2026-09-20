@@ -1,28 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
     <head>
         <title>
             MecQP
         </title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/mecqpadminlogin.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma/css/bulma.min.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            #logintitle{
+                font-size: 100px;
+            }
+            #password{
+                text-align: center;
+            }
+        </style>
     </head>
     <body>
-        <h1>
-            Admin Login
-        </h1>
-        <form method="POST" onsubmit="return loginValidate()">
-            <h2>
-                Enter Password:
-            </h2>
-            <input type="password" id="password" name="adminloginpassword">
-            <br>
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button type="submit">
-                Login
-            </button>
-        </form>
+        <section class="section">
+            <div class="container has-text-centered">
+                <h1 class="title is-1 has-text-info has-text-weight-bold" id="logintitle">
+                    Admin Login
+                </h1>
+            </div>
+        </section>
+        <section class="section">
+            <div class="container has-text-centered">
+                <form method="POST" onsubmit="return loginValidate()">
+                    <h2 class="title is-3">
+                        Enter Password:
+                    </h2>
+                    <input type="password" id="password" name="adminloginpassword" class="input">
+                    <br>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <br>
+                    <button type="submit" class="button is-primary is-dark">
+                        Login
+                    </button>
+                </form>
+            </div>
+        </section>
         {% if wrongpassword %}
-            <h2>
+            <h2 class="title is-2 has-text-danger">
                 Incorred password. Try again.
             </h2>
         {% endif %}
