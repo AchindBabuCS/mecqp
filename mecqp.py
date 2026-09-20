@@ -9,6 +9,7 @@ import os
 ALLOWED_EXTENSIONS={'pdf'}
 app=Flask(__name__)
 app.secret_key=os.environ.get('SECRET_KEY')
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
 passwordhash=os.environ.get('PASSWORD_HASH')
 database=os.environ.get('DATABASE')
 csrf=CSRFProtect(app)
@@ -175,10 +176,11 @@ def about():
 @app.route("/adminlogin", methods=['GET','POST'])
 def adminlogin():
     with sqlite3.connect(database) as conn:
-        logincheckquery='SELECT * FROM loginattempts WHERE login_date=?'
+        logincheckquery='SELECT * FROM loginattempts WHERE login_date=? AND ip_address=?'
+        loginattemptidaddress=request.remote_addr
         loginattemptdate=datetime.today().strftime('%d.%m.%y')
         cur=conn.cursor()
-        cur.execute(logincheckquery,(loginattemptdate,))
+        cur.execute(logincheckquery,(loginattemptdate,loginattemptidaddress))
         loginattempts=cur.fetchall()
         if len(loginattempts)>5:
             return render_template("adminlockedout.html")
@@ -189,9 +191,9 @@ def adminlogin():
                     session['admin']=True
                     return redirect(url_for("admin"))
                 else:
-                    loginattemptquery='''INSERT INTO loginattempts(login_date) VALUES(?)'''
+                    loginattemptquery='''INSERT INTO loginattempts(login_date,ip_address) VALUES(?,?)'''
                     cur=conn.cursor()
-                    cur.execute(loginattemptquery,(loginattemptdate,))
+                    cur.execute(loginattemptquery,(loginattemptdate,loginattemptidaddress))
                     conn.commit()
                     wrongpassword=True
                     return render_template("mecqpadminlogin.html", wrongpassword=wrongpassword)

@@ -1,38 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
     <head>
         <title>
             MecQP
         </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma/css/bulma.min.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            #idtitle{
+                font-size: 80px;
+            }
+        </style>
     </head>
     <body>
-        <h2>
-            Your submission has been accepted and your submission id is:
-            <h1>
-                {{ submission_id }}.
-            </h1>
-            Please remember your submission ID as you can check the status of your submission using it
-        </h2>
+        <section class="section">
+            <div class="content">
+                <div class="container has-text-centered">
+                    <h2>
+                        Your submission has been accepted and your submission id is:
+                        <h1 class="title is-1" id="idtitle">
+                            {{ submission_id }}.
+                        </h1>
+                        Please remember your submission ID as you can check the status of your submission using it
+                    </h2>
+                </div>
+            </div>
+        </section>
         <br>
-        <h3>
-            Go back to homepage
-        </h3>
-        <a href="{{ url_for('home') }}" id="homeurl">
-            Home
-        </a>
-        <br>
-        <h3>
-            Check the status of your submission
-        </h3>
-        <a href="{{ url_for('status') }}" id="statusurl">
-            Status
-        </a>
-        <br>
-        <h3>
-            Submit another PYQP
-        </h3>
-        <a href="{{ url_for('submit') }}" id="submiturl">
-            Submit
-        </a>
+        <section class="section">
+            <div class="container has-text-centered">
+                <h3>
+                    Go back to homepage
+                </h3>
+                <a href="{{ url_for('home') }}" id="homeurl">
+                    Home
+                </a>
+                <br>
+                <h3>
+                    Check the status of your submission
+                </h3>
+                <a href="{{ url_for('status') }}" id="statusurl">
+                    Status
+                </a>
+                <br>
+                <h3>
+                    Submit another PYQP
+                </h3>
+                <a href="{{ url_for('submit') }}" id="submiturl">
+                    Submit
+                </a>
+            </div>
+        </section>
     </body>
 </html>
