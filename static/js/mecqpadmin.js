@@ -241,7 +241,7 @@ function newsubmission(event)
                             <input type="text" id="newsubject" name="newsubject" class="input">
                         </td>
                         <td>
-                            <div class="file">
+                            <div class="file has-name" id="newsubmitname">
                                 <label class="file-label">
                                     <input type="file" id="newfile" name="newfile" class="file-input">
                                     <span class="file-cta">
@@ -250,6 +250,9 @@ function newsubmission(event)
                                         <span class="file-label">
                                             Choose a file...
                                         </span>
+                                    </span>
+                                    <span class="file-name">
+                                        No file uploaded
                                     </span>
                                 </label>
                             </div>
@@ -269,6 +272,11 @@ function newsubmission(event)
             </div>
         </section>`;
         document.body.appendChild(newpaper);
+        var newfile=document.querySelector("#newfile");
+        newfile.onchange=()=>{
+            const fileName=document.querySelector("#newsubmitname .file-name");
+            fileName.textContent=newfile.files[0].name;
+        }
         formopen=true;
         const closenewform=document.querySelector("#closenewform");
         closenewform.addEventListener("click", closenewformfunction);
@@ -283,7 +291,6 @@ function newValidate(){
     var newyear=document.querySelector("#newyear");
     var newsubject_code=document.querySelector("#newsubject_code");
     var newsubject=document.querySelector("#newsubject");
-    var newfile=document.querySelector("#newfile");
     if(newscheme.value=="Select"){
         alert("Scheme cannot be blank");
         return false;

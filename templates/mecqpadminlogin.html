@@ -39,11 +39,13 @@
                 </form>
             </div>
         </section>
-        {% if wrongpassword %}
-            <h2 class="title is-2 has-text-danger">
-                Incorred password. Try again.
-            </h2>
-        {% endif %}
+        <div class="container has-text-centered">
+            {% if wrongpassword %}
+                <h2 class="title is-2 has-text-danger">
+                    Incorred password. Try again.
+                </h2>
+            {% endif %}
+        </div>
         <script>
             function loginValidate()
             {

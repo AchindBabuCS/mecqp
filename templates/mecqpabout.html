@@ -5,20 +5,28 @@
             MecQP
         </title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma/css/bulma.min.css') }}">
+        <style>
+            #devimage{
+                margin-right: auto;
+                margin-left: auto;
+                width: 200px;
+                height: 200px;
+            }
+            #abouttitle{
+                font-size: 100px;
+            }
+        </style>
         <meta name="viewport" content="width=device-width, initial-scale=1">
     <body>
         <section class="section">
             <div class="container has-text-centered">
-                <h1 class="title is-1 has-text-info has-text-weight-bold">
+                <h1 class="title is-1 has-text-info has-text-weight-bold" id="abouttitle">
                     About
                 </h1>
             </div>
         </section>
         <section class="section">
             <div class="content has-text-centered">
-                <p>
-                    Created by Achind Babu, CU'29, MEC
-                </p>
                 <h2>
                     Message from Admin
                 </h2>
@@ -27,6 +35,50 @@
                 </h3>
                 <h3>
                     Posted on {{ latestmessage[1] }}
+                </h3>
+                 <h3 class="has-text-weight-medium is-2">
+                    Github : <a href="https://github.com/AchindBabuCS/mecqp">MecQP</a>
+                </h3>
+                <h3 class="has-text-weight-medium is-2">
+                    For site related queries, send an email to <a href="mailto:admin@mecqp.com">admin@mecqp.com</a>
+                </h3>
+            </div>
+        </section>
+        <section class="section">
+            <div class="content has-text-centered">
+                <h2>
+                    Developed By
+                </h2>
+                <br>
+                <figure class="image is-128x128" id="devimage">
+                    <img class="is-rounded" src="static/devimage.jpeg" />
+                </figure>
+                <br>
+                <h3 class="has-text-weight-medium is-2">
+                    Achind Babu
+                </h3>
+                <h5 class="has-text-weight-medium -5">
+                    CU'29, MEC
+                </h5>
+                <h3 class="has-text-weight-medium is-2">
+                    Github : <a href="https://github.com/AchindBabuCS">AchindBabuCS</a>
+                </h3>
+                <h3 class="has-text-weight-medium is-2">
+                    LinkedIn : <a href="https://www.linkedin.com/in/achind-babu-765325387/">Achind Babu</a>
+                </h3>
+            </div>
+        </section>
+        <section class="section">
+            <div class="container has-text-centered">
+                <h3 class="has-text-weight-medium is-2">
+                    <a href="static\MecQO Terms of Service.pdf">
+                        Terms of Service
+                    </a>
+                </h3>
+                <h3 class="has-text-weight-medium is-2">
+                    <a href="static\MecQP Privacy Policy.pdf">
+                        Privacy Policy
+                    </a>
                 </h3>
             </div>
         </section>

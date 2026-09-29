@@ -1,9 +1,13 @@
 const submit=document.querySelector("#submit");
+var uploadfile=document.querySelector("#file");
+uploadfile.onchange=()=>{
+    const fileName=document.querySelector("#filesubmit .file-name");
+    fileName.textContent = uploadfile.files[0].name;
+};
 submit.addEventListener("submit", submitValidate);
 function submitValidate(event)
     {
         var clickwrap=document.querySelector("#clickwrap");
-        var uploadfile=document.querySelector("#file");
         var filedescription=document.querySelector("#description");
         if(uploadfile.files.length===0)
         {
