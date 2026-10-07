@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request, session, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.middleware.proxy_fix import ProxyFix
 from datetime import datetime
 from flask_wtf.csrf import CSRFProtect
 from dotenv import load_dotenv
@@ -8,6 +9,7 @@ import sqlite3
 import os
 ALLOWED_EXTENSIONS={'pdf'}
 app=Flask(__name__)
+app.wsgi_app=ProxyFix(app.wsgi_app, x_for=1)
 app.secret_key=os.environ.get('SECRET_KEY')
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
 passwordhash=os.environ.get('PASSWORD_HASH')
